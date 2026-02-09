@@ -1,0 +1,23 @@
+{
+  "name": "Career Intelligence Platform",
+  "short_name": "CareerIntel",
+  "description": "AI-driven career guidance tool for resume analysis and job matching",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#8c5e91",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
