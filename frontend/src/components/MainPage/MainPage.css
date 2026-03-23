@@ -1,130 +1,663 @@
 .layout {
-  display: flex;
-  height: 100vh;
-  background: #212121;
-  color: white;
+   display: flex;
+   height: 100vh;
+   background: #212121;
+   color: white;
 }
 
 /* SIDEBAR */
 .sidebar {
-  width: 250px;
-  background: #181818;
-  padding: 20px;
+   width: 250px;
+   background: #181818;
+   padding: 20px;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
 
-  border-right: 1px solid #2c2c2c;
+   border-right: 1px solid #2c2c2c;
 }
 
 .sidebar h2 {
-  margin: 0;
+   margin: 0;
 }
 
 /* Logout */
 .logoutBtn {
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
+   padding: 12px;
+   border: none;
+   border-radius: 10px;
 
-  background: #4a4a4a;
-  color: white;
-  cursor: pointer;
-  transition: 0.2s;
+   background: #4a4a4a;
+   color: white;
+   cursor: pointer;
+   transition: 0.2s;
 }
 
 .logoutBtn:hover {
-  background: #424242;
+   background: #424242;
 }
 
 /* CHAT SECTION */
 .chatSection {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+   flex: 1;
+   display: flex;
+   flex-direction: column;
 }
 
 /* Header */
 .chatHeader {
-  padding: 15px;
-  border-bottom: 1px solid #2c2c2c;
-  font-weight: bold;
+   padding: 15px;
+   border-bottom: 1px solid #2c2c2c;
+   font-weight: bold;
 }
 
 /* Messages */
 .chatMessages {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
+   flex: 1;
+   padding: 20px;
+   overflow-y: auto;
 
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+   display: flex;
+   flex-direction: column;
+   gap: 12px;
 }
 
 /* Messages */
 .message {
-  max-width: 60%;
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 14px;
+   max-width: 60%;
+   padding: 12px 16px;
+   border-radius: 12px;
+   font-size: 14px;
 }
 
 /* AI */
 .message.ai {
-  background: #303030;
-  align-self: flex-start;
+   background: #303030;
+   align-self: flex-start;
 }
 
 /* USER */
 .message.user {
-  background: #848484;
-  align-self: flex-end;
+   background: #848484;
+   align-self: flex-end;
 }
 
 /* Input */
 .chatInput {
-  display: flex;
-  border-top: 1px solid #303030;
+   display: flex;
+   border-top: 1px solid #303030;
 }
 
 .chatInput input:focus {
-  border: 1px solid #000000;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+   border: 1px solid #000000;
+   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
 }
 
 .chatInput {
-  position: relative;
-  justify-content: center;
-  margin-bottom: 2rem;
+   position: relative;
+   justify-content: center;
+   margin-bottom: 2rem;
 }
 
 .inputMain {
-  width: 70vw;
-  height: 2rem;
-  background-color: #303030;
-  border-radius: 20px;
-  padding: 5px 10px;
-  color: white;
+   width: 70vw;
+   height: 2rem;
+   background-color: #303030;
+   border-radius: 20px;
+   padding: 5px 10px;
+   color: white;
 }
 
 .catalogButtons {
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-  gap: 10px;
+   display: flex;
+   flex-direction: column;
+   justify-content: end;
+   gap: 10px;
 }
 
 .buttonSuport {
-  background: transparent;
-  color: white;
-  border: none;
+   background: transparent;
+   color: white;
+   border: none;
 }
 
 .buttonSend {
-  position: absolute;
-  right: 8%;
-  top: 20%;
-  border-radius: 50%;
+   position: absolute;
+   right: 8%;
+   top: 20%;
+   border-radius: 50%;
+}
+
+/* Добавьте эти стили к существующим */
+
+/* Стили для textarea вместо input */
+.inputMain {
+   width: 70vw;
+   background-color: #303030;
+   border-radius: 20px;
+   padding: 10px 45px 10px 16px;
+   color: white;
+   border: none;
+   outline: none;
+   font-size: 14px;
+   font-family: inherit;
+   resize: none;
+   min-height: 40px;
+   max-height: 100px;
+   line-height: 1.4;
+}
+
+.inputMain:focus {
+   border: 1px solid #8c5e91;
+   box-shadow: 0 0 0 2px rgba(140, 94, 145, 0.3);
+}
+
+.inputMain:disabled {
+   opacity: 0.7;
+   cursor: not-allowed;
+}
+
+/* Стили для кнопки отправки */
+.buttonSend {
+   position: absolute;
+   right: calc(15% + 8px);
+   top: 50%;
+   transform: translateY(-50%);
+   width: 32px;
+   height: 32px;
+   border-radius: 50%;
+   background: #4a4a4a;
+   border: none;
+   cursor: pointer;
+   transition: all 0.2s;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 18px;
+   color: white;
+}
+
+.buttonSend:hover:not(:disabled) {
+   background: #6d4772;
+   transform: translateY(-50%) scale(1.05);
+}
+
+.buttonSend:disabled {
+   opacity: 0.5;
+   cursor: not-allowed;
+}
+
+/* Позиционирование контейнера ввода */
+.chatInput {
+   position: relative;
+   display: flex;
+   justify-content: center;
+   margin-bottom: 2rem;
+}
+
+/* Скрываем скроллбар для WebKit браузеров (Chrome, Safari, Edge) */
+.chatMessages::-webkit-scrollbar,
+.sidebar div::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
+   width: 0;
+   height: 0;
+   background: transparent;
+}
+
+/* Скрываем скроллбар для Firefox */
+.chatMessages,
+.sidebar div,
+textarea {
+   scrollbar-width: none;
+}
+
+/* Скрываем скроллбар для IE/Edge */
+.chatMessages,
+.sidebar div,
+textarea {
+   -ms-overflow-style: none;
+}
+
+/* Обновляем стили chatInput */
+.chatInput {
+   display: flex;
+   justify-content: center;
+   gap: 12px;
+   margin-bottom: 2rem;
+   padding: 0 20px;
+}
+
+/* Существующие стили остаются, добавляем новые */
+
+/* Стили для блоков кода */
+.code-block {
+   margin: 12px 0;
+   border-radius: 8px;
+   overflow: hidden;
+   background-color: #1e1e1e;
+   border: 1px solid #333;
+}
+
+.code-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 8px 12px;
+   background-color: #2d2d2d;
+   border-bottom: 1px solid #333;
+   font-size: 12px;
+}
+
+.code-language {
+   color: #8c5e91;
+   font-weight: 500;
+   text-transform: uppercase;
+   letter-spacing: 0.5px;
+}
+
+.copy-button {
+   background: #4a4a4a;
+   border: none;
+   color: white;
+   padding: 4px 8px;
+   border-radius: 4px;
+   cursor: pointer;
+   font-size: 11px;
+   transition: all 0.2s;
+}
+
+.copy-button:hover {
+   background: #6d4772;
+   transform: scale(1.05);
+}
+
+.code-content {
+   margin: 0;
+   padding: 12px;
+   overflow-x: auto;
+   font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+   font-size: 12px;
+   line-height: 1.5;
+   background-color: #1e1e1e;
+   color: #d4d4d4;
+}
+
+.code-line {
+   display: flex;
+   gap: 12px;
+   white-space: pre;
+}
+
+.line-number {
+   color: #858585;
+   user-select: none;
+   text-align: right;
+   min-width: 35px;
+   font-size: 11px;
+}
+
+.line-content {
+   flex: 1;
+   white-space: pre-wrap;
+   word-break: break-all;
+}
+
+/* Подсветка для разных языков (простая версия) */
+.code-content code {
+   display: block;
+}
+
+/* Для inline кода */
+.message pre:not(.code-content) {
+   background: #2d2d2d;
+   padding: 8px;
+   border-radius: 4px;
+   overflow-x: auto;
+   font-family: monospace;
+   font-size: 12px;
+   margin: 8px 0;
+}
+
+.message code {
+   background: #2d2d2d;
+   padding: 2px 4px;
+   border-radius: 3px;
+   font-family: monospace;
+   font-size: 12px;
+   color: #8c5e91;
+}
+
+/* Стили для inline кода внутри текста */
+.message :not(pre) > code {
+   background: #2d2d2d;
+   padding: 2px 4px;
+   border-radius: 3px;
+   font-size: 0.9em;
+   font-family: monospace;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+   .code-content {
+      font-size: 11px;
+   }
+
+   .line-number {
+      min-width: 30px;
+   }
+
+   .code-header {
+      font-size: 10px;
+   }
+}
+
+/* Существующие стили остаются, добавляем новые */
+
+/* Стили для блоков кода */
+.code-block {
+   margin: 12px 0;
+   border-radius: 8px;
+   overflow: hidden;
+   background-color: #1e1e1e;
+   border: 1px solid #333;
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.code-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 8px 12px;
+   background-color: #2d2d2d;
+   border-bottom: 1px solid #333;
+   font-size: 12px;
+}
+
+.code-language {
+   color: #8c5e91;
+   font-weight: 500;
+   text-transform: uppercase;
+   letter-spacing: 0.5px;
+   font-family: monospace;
+}
+
+.code-lines-count {
+   color: #858585;
+   font-size: 10px;
+   margin-left: 8px;
+   text-transform: none;
+   font-weight: normal;
+}
+
+.copy-button {
+   background: #4a4a4a;
+   border: none;
+   color: white;
+   padding: 4px 8px;
+   border-radius: 4px;
+   cursor: pointer;
+   font-size: 11px;
+   transition: all 0.2s;
+   font-family: inherit;
+}
+
+.copy-button:hover {
+   background: #6d4772;
+   transform: scale(1.05);
+}
+
+.copy-button:active {
+   transform: scale(0.95);
+}
+
+.code-content {
+   margin: 0;
+   padding: 12px;
+   overflow-x: auto;
+   font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+   font-size: 12px;
+   line-height: 1.5;
+   background-color: #1e1e1e;
+   color: #d4d4d4;
+}
+
+.code-line {
+   display: flex;
+   gap: 12px;
+   white-space: pre;
+   min-height: 20px;
+}
+
+.line-number {
+   color: #858585;
+   user-select: none;
+   text-align: right;
+   min-width: 35px;
+   font-size: 11px;
+   font-family: monospace;
+   opacity: 0.7;
+}
+
+.line-content {
+   flex: 1;
+   white-space: pre-wrap;
+   word-break: break-all;
+   font-family: monospace;
+}
+
+/* Стили для обычного текста */
+.plain-text {
+   white-space: pre-wrap;
+   word-break: break-word;
+   line-height: 1.6;
+}
+
+/* Для inline кода */
+.message pre:not(.code-content) {
+   background: #2d2d2d;
+   padding: 8px;
+   border-radius: 4px;
+   overflow-x: auto;
+   font-family: monospace;
+   font-size: 12px;
+   margin: 8px 0;
+}
+
+.message code {
+   background: #2d2d2d;
+   padding: 2px 4px;
+   border-radius: 3px;
+   font-family: monospace;
+   font-size: 12px;
+   color: #efa2f8;
+}
+
+/* Стили для inline кода внутри текста */
+.message :not(pre) > code {
+   background: #2d2d2d;
+   padding: 2px 4px;
+   border-radius: 3px;
+   font-size: 0.9em;
+   font-family: monospace;
+   color: #dc37ef;
+   white-space: nowrap;
+}
+
+/* Анимация для уведомления */
+@keyframes fadeOut {
+   0% {
+      opacity: 1;
+      transform: translateY(0);
+   }
+   70% {
+      opacity: 1;
+      transform: translateY(0);
+   }
+   100% {
+      opacity: 0;
+      transform: translateY(-20px);
+      display: none;
+   }
+}
+
+/* Стили для разных типов кода (можно добавить подсветку) */
+.code-content .code-line:hover {
+   background-color: rgba(140, 94, 145, 0.1);
+}
+
+/* Для длинных строк - горизонтальный скролл */
+.code-content {
+   overflow-x: auto;
+}
+
+.code-content::-webkit-scrollbar {
+   height: 8px;
+   background: #2d2d2d;
+}
+
+.code-content::-webkit-scrollbar-thumb {
+   background: #8c5e91;
+   border-radius: 4px;
+}
+
+.code-content::-webkit-scrollbar-thumb:hover {
+   background: #6d4772;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+   .code-content {
+      font-size: 10px;
+   }
+
+   .line-number {
+      min-width: 30px;
+      font-size: 9px;
+   }
+
+   .code-header {
+      font-size: 10px;
+      padding: 6px 10px;
+   }
+
+   .copy-button {
+      padding: 3px 6px;
+      font-size: 10px;
+   }
+}
+
+/* Поддержка темной темы для выделения текста */
+::selection {
+   background: rgba(140, 94, 145, 0.3);
+   color: white;
+}
+
+.code-content ::selection {
+   background: rgba(140, 94, 145, 0.5);
+}
+
+/* Модальное окно для резюме */
+.modal-overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: rgba(0, 0, 0, 0.8);
+   backdrop-filter: blur(4px);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   z-index: 1000;
+   animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+   background: #1e1e1e;
+   border-radius: 12px;
+   max-width: 80vw;
+   max-height: 80vh;
+   width: 800px;
+   display: flex;
+   flex-direction: column;
+   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+   border: 1px solid #333;
+   animation: slideUp 0.3s ease-out;
+}
+
+.modal-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 16px 20px;
+   border-bottom: 1px solid #333;
+   background: #2d2d2d;
+   border-radius: 12px 12px 0 0;
+}
+
+.modal-header h3 {
+   margin: 0;
+   color: #8c5e91;
+   font-size: 18px;
+}
+
+.modal-close {
+   background: none;
+   border: none;
+   color: #858585;
+   font-size: 24px;
+   cursor: pointer;
+   width: 30px;
+   height: 30px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 6px;
+   transition: all 0.2s;
+}
+
+.modal-close:hover {
+   background: #4a4a4a;
+   color: white;
+}
+
+.modal-body {
+   padding: 20px;
+   overflow-y: auto;
+   flex: 1;
+}
+
+.resume-json {
+   background: #0d0d0d;
+   padding: 16px;
+   border-radius: 8px;
+   font-family: 'Courier New', monospace;
+   font-size: 12px;
+   line-height: 1.5;
+   color: #d4d4d4;
+   overflow-x: auto;
+   margin: 0;
+   white-space: pre-wrap;
+   word-break: break-word;
+}
+
+@keyframes fadeIn {
+   from {
+      opacity: 0;
+   }
+   to {
+      opacity: 1;
+   }
+}
+
+@keyframes slideUp {
+   from {
+      transform: translateY(30px);
+      opacity: 0;
+   }
+   to {
+      transform: translateY(0);
+      opacity: 1;
+   }
 }
