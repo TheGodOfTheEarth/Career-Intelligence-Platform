@@ -17,11 +17,13 @@ async function apiRequest(endpoint, options = {}) {
       ...options,
    })
 
-   // Если сервер вернул 401 — токен просрочен, выкидываем на логин
+   // Если сервер вернул 401 — токен просрочен
    if (response.status === 401) {
       localStorage.removeItem('token')
-      window.location.href = '/login'
-      return
+      // Выбрасываем специальную ошибку для обработки в компонентах
+      const error = new Error('Сессия истекла. Пожалуйста, войдите снова.')
+      error.status = 401
+      throw error
    }
 
    const data = await response.json()
@@ -37,30 +39,35 @@ async function apiRequest(endpoint, options = {}) {
 // АВТОРИЗАЦИЯ
 // ============================================
 export const auth = {
-   // Регистрация — сохраняет токен автоматически
+   // Регистрация — возвращает токен и данные пользователя
    register: async ({ name, email, password }) => {
       const data = await apiRequest('/api/auth/register', {
          method: 'POST',
          body: JSON.stringify({ name, email, password }),
       })
-      localStorage.setItem('token', data.token) // сохраняем токен
+      // Сохраняем токен в localStorage
+      if (data.token) {
+         localStorage.setItem('token', data.token)
+      }
       return data
    },
 
-   // Вход — сохраняет токен автоматически
+   // Вход — возвращает токен и данные пользователя
    login: async ({ email, password }) => {
       const data = await apiRequest('/api/auth/login', {
          method: 'POST',
          body: JSON.stringify({ email, password }),
       })
-      localStorage.setItem('token', data.token) // сохраняем токен
+      // Сохраняем токен в localStorage
+      if (data.token) {
+         localStorage.setItem('token', data.token)
+      }
       return data
    },
 
    // Выход — удаляет токен
    logout: () => {
       localStorage.removeItem('token')
-      window.location.href = '/login'
    },
 
    // Проверить — залогинен ли пользователь
@@ -108,3 +115,6 @@ export const resume = {
    // Данные для генерации PDF
    getPdfData: (id) => apiRequest(`/api/resume/${id}/data-for-pdf`),
 }
+
+// Экспортируем API_URL на случай, если понадобится
+export { API_URL }
