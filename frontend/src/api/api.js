@@ -6,29 +6,35 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001'
 // Автоматически добавляет JWT токен к каждому запросу
 // ============================================
 async function apiRequest(endpoint, options = {}) {
-   const token = localStorage.getItem('token') // берём токен из браузера
+   const token = localStorage.getItem('token')
+
+   console.log(`=== API ЗАПРОС: ${endpoint} ===`)
+   console.log('Метод:', options.method || 'GET')
+   console.log('Тело запроса:', options.body)
 
    const response = await fetch(`${API_URL}${endpoint}`, {
       headers: {
          'Content-Type': 'application/json',
-         // Если токен есть — добавляем его в заголовок
          ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       ...options,
    })
 
-   // Если сервер вернул 401 — токен просрочен
+   console.log('Статус ответа:', response.status)
+   console.log('Заголовки ответа:', response.headers)
+
    if (response.status === 401) {
       localStorage.removeItem('token')
-      // Выбрасываем специальную ошибку для обработки в компонентах
       const error = new Error('Сессия истекла. Пожалуйста, войдите снова.')
       error.status = 401
       throw error
    }
 
    const data = await response.json()
+   console.log('Данные ответа:', data)
 
    if (!response.ok) {
+      console.error('Ошибка сервера:', data)
       throw new Error(data.error || 'Ошибка сервера')
    }
 
