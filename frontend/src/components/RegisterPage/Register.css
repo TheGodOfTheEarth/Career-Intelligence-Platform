@@ -1,0 +1,17 @@
+.buttonRegIn {
+  background-color: transparent;
+  border: none;
+  width: fit-content;
+  height: 3rem;
+  font-size: medium;
+  font-weight: 200;
+  transition: all 0.3s ease;
+  color: #fff;
+  padding: 15px;
+}
+
+.buttonRegIn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  cursor: pointer;
+}
