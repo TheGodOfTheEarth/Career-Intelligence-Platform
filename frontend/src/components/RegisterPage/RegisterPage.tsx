@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import './Register.css'
 
 function RegisterPage() {
   const [login, setLogin] = useState('')
@@ -47,7 +48,7 @@ function RegisterPage() {
 
           {error && <p style={{ color: 'red' }}>{error}</p>}
           <div className="buttonWrapper">
-            <button onClick={handleLogin} className="buttonLogIn">
+            <button onClick={handleLogin} className="buttonRegIn">
               Зарегистрироваться
             </button>
           </div>
