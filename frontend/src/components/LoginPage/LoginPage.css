@@ -1,218 +1,110 @@
-@font-face {
-  font-family: 'Oswald';
-  src: url('../../assets/fonts/Oswald.woff');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Unbounded:wght@200..900&display=swap');
+@import url('../../index.css');
+
+.logniPageWrapper {
+  padding: 20px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: fit-content;
 }
 
-p {
-  margin: 0;
-}
-
-.login {
-  height: 300vh;
-  width: 99vw;
-  /* overflow-x: hidden; */
-  /* background: url('../../assets/img/thirdBG.jpg');
-  background-position: cover; */
-}
-
-#hiContainer {
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.3) 0%,
-      /* Начало */ rgba(0, 0, 0, 0.3) 15%,
-      /* Плавное изменение */ rgba(0, 0, 0, 0.3) 30%,
-      /* Постепенно светлеет */ rgba(0, 0, 0, 0.2) 50%,
-      /* Еще светлее */ rgba(245, 222, 179, 0.2) 70%,
-      /* Начинает появляться бежевый */ rgba(202, 186, 156, 0.7) 85%,
-      /* Почти полностью бежевый */ rgba(245, 222, 179, 1) 100%
-        /* Конечный цвет */
-    ),
-    url('../../assets/img/thirdBG.jpg');
+.loginPage {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  background: url('../../assets/img/bgMountain.jpg');
   background-size: cover;
 }
 
-/* #bg-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  object-fit: cover;
-  z-index: -1;
-  pointer-events: none;
+.panel {
+  width: 320px;
+  padding: 30px;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.2); /* прозрачный белый */
+  backdrop-filter: blur(10px); /* эффект стекла */
+  -webkit-backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 15px;
+
+  color: #fff;
 }
 
-#video-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+.loginTexts {
+  width: 50vw;
+  text-align: center;
+  font-size: larger;
+  font-weight: 500;
+  font-family: 'Unbounded';
+  color: gray;
+}
+
+.buttonLogIn {
+  background-color: transparent;
+  border: none;
+  width: 50%;
+  height: 2rem;
+  font-size: medium;
+  font-weight: 200;
+  transition: all 0.3s ease;
+  color: #fff;
+}
+
+.buttonLogIn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+}
+/* 
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 } */
 
-.animation {
-  background-color: #68ffde;
-  border: none;
-  border-radius: 20px;
-  height: 30px;
-  color: rgb(150, 150, 150);
+.inputGroup input {
+  width: 90%;
+  padding: 14px 12px;
+  font-size: 14px;
+
+  border-radius: 10px;
+  border: 1px solid #ddd;
+
+  background: #ffffff;
+  color: #333;
+
+  outline: none;
+  transition: 0.25s ease;
 }
 
-.login {
-  overflow: hidden;
+/* placeholder */
+.inputGroup input::placeholder {
+  color: #aaa;
 }
-
-.loginMenu {
-  display: flex;
-  justify-content: start;
-  /* background-color: rgba(255, 255, 255, 0.3); */
-}
-
-.loginMenuItem {
-  background-color: rgb(245, 222, 179, 0.2);
-  align-content: center;
-  border-bottom-right-radius: 1rem;
-}
-
-.menuBurger {
-  background: none;
-  border: none;
-  width: 2rem;
-}
-
-.contentWrapper {
-  margin-top: 30vh;
-  margin-bottom: 20vh;
-  overflow: hidden;
-  justify-items: center;
-}
-
-#mainContainer {
-  /* background:
-    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url('../../assets/img/sixthBg.jpg') no-repeat;
-  background-size: cover; */
-
-  background: rgb(245, 222, 179);
-  background-attachment: cover;
-  backdrop-filter: blur(100px);
-
-  color: #8c5e91;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  justify-content: center;
-  align-items: center;
-}
-
-.containerPhoto {
-  width: 20rem;
-  height: 100%;
-  border-radius: 20px;
-}
-
-.mainContainerPanel {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  justify-content: space-between;
-
-  width: 80vw;
-  height: 50vh;
-  background: rgba(255, 255, 255, 0.15); /* Полупрозрачный белый */
-  backdrop-filter: blur(12px); /* Размытие фона позади */
-  -webkit-backdrop-filter: blur(12px); /* Для Safari */
-
-  border-radius: 16px; /* Закругленные углы */
-  border: 1px solid rgba(255, 255, 255, 0.3); /* Тонкая белая рамка */
-
-  box-shadow:
-    0 4px 30px rgba(0, 0, 0, 0.1),
-    /* Внешняя тень */ inset 0 0 0 1px rgba(255, 255, 255, 0.2); /* Внутренняя подсветка */
-
-  padding: 24px;
-}
-
-.mainContainerTexts {
-  font-size: 2rem;
-}
-.containerPanelDescription {
-  font-size: 1.5rem;
-}
-
-.text1 {
-  margin: 0;
-  opacity: 1;
-
-  font-size: 8rem;
-  color: wheat;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-
-.descrition1 {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  color: wheat;
-  font-size: 1rem;
-}
-
-.tipacub {
+.inputGroup label {
   position: absolute;
-  /* transform: translate(50%, 50%); */
-  background-color: #01ddff;
-  line-height: 1rem;
-  font-size: large;
-  color: transparent;
-  /* transition: all ease 1s; */
-}
-#endContainer {
-  background:
-    linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.3) 0%,
-      /* Начало */ rgba(0, 0, 0, 0.3) 15%,
-      /* Плавное изменение */ rgba(0, 0, 0, 0.3) 30%,
-      /* Постепенно светлеет */ rgba(0, 0, 0, 0.2) 50%,
-      /* Еще светлее */ rgba(245, 222, 179, 0.2) 70%,
-      /* Начинает появляться бежевый */ rgba(202, 186, 156, 0.7) 85%,
-      /* Почти полностью бежевый */ rgba(245, 222, 179, 1) 100%
-        /* Конечный цвет */
-    ),
-    url('../../assets/img/last.jpg');
-  background-size: cover;
-  /* outline: 1px solid forestgreen; */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  left: 0px;
+  top: 50%;
+  transform: translateY(-50%);
 
-  color: wheat;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
 
-.endText {
-  font-size: 2rem;
-}
-
-/* Анимированное свечение */
-.pulsing-glow {
-  box-shadow: 0 0 20px 5px rgba(255, 0, 128, 0.7);
-
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 20px 5px rgba(252, 255, 234, 0.7);
-  }
-  50% {
-    box-shadow: 0 0 40px 10px rgba(243, 255, 175, 0.7);
-  }
-}
-
-.scene {
-  height: 100vh;
-  position: relative;
+  pointer-events: none;
+  transition: 0.3s;
 }
