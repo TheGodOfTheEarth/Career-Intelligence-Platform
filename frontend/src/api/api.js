@@ -87,25 +87,30 @@ export const auth = {
 // ЧАТ С ИИ
 // ============================================
 export const chat = {
-   // Создать новую сессию (новый диалог)
-   createSession: () => apiRequest('/api/chat/session', { method: 'POST' }),
+   createSession: (previousSessionId) =>
+      apiRequest('/api/chat/session', {
+         method: 'POST',
+         body: JSON.stringify({ previousSessionId }),
+      }),
 
-   // Получить все сессии пользователя (история)
-   getSessions: () => apiRequest('/api/chat/sessions'),
+   getSessions: (currentSessionId) =>
+      apiRequest(
+         `/api/chat/sessions${currentSessionId ? `?currentSessionId=${currentSessionId}` : ''}`,
+      ),
 
-   // Получить конкретную сессию со всеми сообщениями
    getSession: (sessionId) => apiRequest(`/api/chat/session/${sessionId}`),
 
-   // Отправить сообщение в ИИ
    sendMessage: (sessionId, content) =>
       apiRequest(`/api/chat/session/${sessionId}/message`, {
          method: 'POST',
          body: JSON.stringify({ content }),
       }),
 
-   // Удалить сессию
-   deleteSession: (sessionId) =>
-      apiRequest(`/api/chat/session/${sessionId}`, { method: 'DELETE' }),
+   deleteSession: (sessionId, currentSessionId) =>
+      apiRequest(
+         `/api/chat/session/${sessionId}${currentSessionId ? `?currentSessionId=${currentSessionId}` : ''}`,
+         { method: 'DELETE' },
+      ),
 }
 
 // ============================================

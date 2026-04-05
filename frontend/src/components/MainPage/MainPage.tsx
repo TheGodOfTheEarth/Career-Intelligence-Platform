@@ -232,9 +232,12 @@ function MainPage() {
       }
    }
 
-   const loadSessions = async () => {
+   const loadSessions = async (compress = false) => {
       try {
-         const data = await chat.getSessions()
+         // Если compress=true — передаём текущую сессию для сжатия
+         const data = await chat.getSessions(
+            compress ? currentSessionId || undefined : undefined,
+         )
          setSessions(data.sessions || [])
       } catch (error) {
          console.error('Ошибка загрузки сессий:', error)
@@ -302,7 +305,8 @@ function MainPage() {
    const createNewSession = async () => {
       try {
          setLoading(true)
-         const data = await chat.createSession()
+         // Передаём ID текущей сессии чтобы бэкенд её сжал
+         const data = await chat.createSession(currentSessionId || undefined)
          setCurrentSessionId(data.session.id)
          setMessages([
             {
@@ -385,7 +389,8 @@ function MainPage() {
 
    const handleDeleteSession = async (sessionId: string) => {
       try {
-         await chat.deleteSession(sessionId)
+         // Передаём текущую открытую сессию — бэкенд её сжмёт если удаляем другую
+         await chat.deleteSession(sessionId, currentSessionId || undefined)
          await loadSessions()
 
          if (currentSessionId === sessionId) {
@@ -430,7 +435,13 @@ function MainPage() {
             <div className="catalogButtons">
                <button
                   className="buttonSuport"
-                  onClick={() => setShowSessions(!showSessions)}
+                  onClick={() => {
+                     if (!showSessions) {
+                        // При открытии истории — сжимаем текущую сессию
+                        loadSessions(true)
+                     }
+                     setShowSessions(!showSessions)
+                  }}
                   style={{
                      cursor: 'pointer',
                      padding: '8px',
