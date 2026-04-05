@@ -1,5 +1,5 @@
 // Адрес бэкенда — локально или Railway
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001'
+const API_URL = 'https://career-intelligence-platform-backend-production.up.railway.app'
 
 // ============================================
 // Базовая функция для всех запросов
