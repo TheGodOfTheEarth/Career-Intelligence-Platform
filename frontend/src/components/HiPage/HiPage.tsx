@@ -1,7 +1,5 @@
 import React, { useLayoutEffect } from 'react'
-import React, { useLayoutEffect } from 'react'
 import './HiPage.css'
-import { useNavigate } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
 import SplitText from 'gsap/src/SplitText'
@@ -189,7 +187,7 @@ function HiPage() {
         </div>
         <div className="contact-information">
           Контактная информация:<br></br>Бажанов Юрий, 2бАСУ1, +79779919703
-          <br></br>
+          <br></br>Проект кафедры АСУ 09.03.01 <br></br>
           <a href="https://vk.com/club236966262">
             https://vk.com/club236966262
           </a>
