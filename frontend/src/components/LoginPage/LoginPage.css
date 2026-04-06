@@ -108,3 +108,36 @@
   pointer-events: none;
   transition: 0.3s;
 }
+
+/* =========================
+   📱 Tablets (до 1024px)
+========================= */
+@media (max-width: 1024px) {
+  .panel {
+  }
+}
+
+/* =========================
+   📱 Small tablets / large phones (до 768px)
+========================= */
+@media (max-width: 768px) {
+  .panel {
+  }
+}
+
+/* =========================
+   📱 Phones (до 480px)
+========================= */
+@media (max-width: 480px) {
+  .panel {
+    width: fit-content;
+  }
+}
+
+/* =========================
+   📱 Очень маленькие экраны (до 360px)
+========================= */
+@media (max-width: 360px) {
+  .panel {
+  }
+}

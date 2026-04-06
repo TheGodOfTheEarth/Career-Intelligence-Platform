@@ -118,14 +118,14 @@ a {
 }
 
 .containerPhoto {
-  width: 20rem;
+  width: 50rem;
   height: 100%;
   border-radius: 20px;
 }
 
 .mainContainerPanel {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   justify-content: space-between;
 
@@ -150,6 +150,7 @@ a {
 }
 .containerPanelDescription {
   font-size: 1.5rem;
+  padding: 20px;
 }
 
 .text1 {
@@ -274,4 +275,142 @@ a {
   opacity: 0.7;
   position: relative;
   top: 100px;
+}
+
+/* =========================
+   📱 Tablets (до 1024px)
+========================= */
+@media (max-width: 1024px) {
+  .text1 {
+    font-size: 5rem;
+  }
+
+  .containerPanelDescription {
+    font-size: 1.2rem;
+  }
+
+  .mainContainerPanel {
+    width: 90vw;
+    height: 80vh;
+    flex-direction: column;
+    /* grid-template-columns: 1fr; вместо 2 колонок */
+    gap: 1.5rem;
+  }
+
+  .containerPhoto {
+    width: 50%;
+    height: 70vh;
+  }
+}
+
+/* =========================
+   📱 Small tablets / large phones (до 768px)
+========================= */
+@media (max-width: 768px) {
+  .text1 {
+    font-size: 3.5rem;
+    text-align: center;
+  }
+
+  .descrition1 {
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 0 1rem;
+  }
+
+  .containerPanelDescription {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .mainContainerPanel {
+    padding: 16px;
+  }
+
+  /* .containerPhoto {
+    display: none;
+  } */
+
+  .loginMenu {
+    height: auto;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+  }
+
+  .loginButtons {
+    margin-right: 0;
+  }
+
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .button {
+    /* width: 80%; */
+    text-align: center;
+  }
+}
+
+/* =========================
+   📱 Phones (до 480px)
+========================= */
+@media (max-width: 480px) {
+  .text1 {
+    font-size: 2.5rem;
+  }
+
+  .descrition1 {
+    font-size: 0.8rem;
+  }
+
+  .endText {
+    font-size: 1.3rem;
+    text-align: center;
+    padding: 0 1rem;
+  }
+
+  .containerPanelDescription {
+    font-size: 1.2rem;
+  }
+
+  .containerPhoto {
+    display: none;
+  }
+
+  .mainContainerPanel {
+    height: fit-content;
+    color: #76487b;
+  }
+
+  .contact-information {
+    font-size: 0.8rem;
+    top: 50px;
+    padding: 0 1rem;
+  }
+
+  .contentWrapper {
+    margin-top: 20vh;
+    margin-bottom: 10vh;
+    background: none;
+  }
+}
+
+/* =========================
+   📱 Очень маленькие экраны (до 360px)
+========================= */
+@media (max-width: 360px) {
+  .text1 {
+    font-size: 2rem;
+  }
+
+  .button {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
+  .containerPanelDescription {
+    font-size: 0.8rem;
+  }
 }
