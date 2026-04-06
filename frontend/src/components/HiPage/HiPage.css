@@ -13,8 +13,8 @@ a {
 }
 
 .login {
-  height: 300vh;
-  width: 99vw;
+  height: auto;
+  width: 100vw;
   /* overflow-x: hidden; */
   /* background: url('../../assets/img/thirdBG.jpg');
   background-position: cover; */
@@ -97,7 +97,7 @@ a {
   justify-items: center;
 }
 
-#mainContainer {
+.mainContainer {
   /* background:
     linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url('../../assets/img/sixthBg.jpg') no-repeat;
@@ -109,10 +109,11 @@ a {
 
   color: var(--purple-color);
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 3rem;
+
+  height: fit-content;
   justify-content: center;
   align-items: center;
 }
@@ -377,6 +378,10 @@ a {
 
   .containerPhoto {
     display: none;
+  }
+
+  .mainContainer {
+    padding: 2vw;
   }
 
   .mainContainerPanel {

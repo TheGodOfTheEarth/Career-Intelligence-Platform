@@ -152,7 +152,7 @@ function HiPage() {
           </p>
         </div>
       </div>
-      <div className="scene" id="mainContainer">
+      <div className=" mainContainer" id="mainContainer">
         <div className="mainContainerTexts layer bg">
           {/* <p id="about">ABOUT</p> */}
         </div>
