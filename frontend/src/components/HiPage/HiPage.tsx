@@ -1,6 +1,6 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react'
+import React, { useLayoutEffect } from 'react'
 import './HiPage.css'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
 import SplitText from 'gsap/src/SplitText'
 import { ScrollTrigger } from 'gsap/all'
@@ -22,8 +22,6 @@ function HiPage() {
       const endText = new SplitText('#endText', {
          type: 'chars, words',
       })
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-      const finalChar = 'O'
 
       panelDescription.words.forEach((word, i) => {
          gsap.fromTo(

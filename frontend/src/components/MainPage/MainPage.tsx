@@ -422,6 +422,7 @@ function MainPage() {
 
    useEffect(() => {
       loadSessions()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [])
 
    return (
