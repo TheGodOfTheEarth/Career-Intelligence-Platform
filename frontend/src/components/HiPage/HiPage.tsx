@@ -1,5 +1,7 @@
 import React, { useLayoutEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 import './HiPage.css'
+import { useNavigate } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
 import SplitText from 'gsap/src/SplitText'
