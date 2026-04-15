@@ -29,7 +29,7 @@ type Session = {
    userId?: string
 }
 
-// Компонент для форматирования сообщений с кодом
+// Компонент для форматирования сообщений с кодом (НЕ показывает JSON)
 const FormattedMessage = ({ text }: { text: string }) => {
    const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g
    const parts: React.ReactNode[] = []
@@ -70,6 +70,28 @@ const FormattedMessage = ({ text }: { text: string }) => {
    }
 
    while ((match = codeBlockRegex.exec(text)) !== null) {
+      const language = match[1] || 'plaintext'
+
+      // ПРОПУСКАЕМ JSON блоки - они не будут показаны в чате
+      if (language.toLowerCase() === 'json') {
+         if (match.index > lastIndex) {
+            const plainText = text.slice(lastIndex, match.index)
+            const processedText = processText(plainText)
+            parts.push(
+               <div key={`text-${lastIndex}`} className="plain-text">
+                  {processedText.split('\n').map((line, i) => (
+                     <span key={i}>
+                        {line}
+                        {i < processedText.split('\n').length - 1 && <br />}
+                     </span>
+                  ))}
+               </div>,
+            )
+         }
+         lastIndex = match.index + match[0].length
+         continue
+      }
+
       if (match.index > lastIndex) {
          const plainText = text.slice(lastIndex, match.index)
          const processedText = processText(plainText)
@@ -85,7 +107,6 @@ const FormattedMessage = ({ text }: { text: string }) => {
          )
       }
 
-      const language = match[1] || 'plaintext'
       let code = decodeHtmlEntities(match[2])
       code = code.replace(/^\n+/, '').replace(/\n+$/, '')
 
@@ -115,7 +136,6 @@ const FormattedMessage = ({ text }: { text: string }) => {
          css: 'CSS',
          scss: 'SCSS',
          sass: 'Sass',
-         json: 'JSON',
          xml: 'XML',
          sql: 'SQL',
          bash: 'Bash',
@@ -189,6 +209,250 @@ const FormattedMessage = ({ text }: { text: string }) => {
    return <>{parts}</>
 }
 
+// Компонент для извлечения JSON из текста
+const extractJsonFromText = (text: string): any => {
+   const jsonRegex = /```json\n([\s\S]*?)```/
+   const match = text.match(jsonRegex)
+   if (match && match[1]) {
+      try {
+         return JSON.parse(match[1])
+      } catch (e) {
+         console.error('Ошибка парсинга JSON:', e)
+         return null
+      }
+   }
+   return null
+}
+
+// Компонент для отображения форматированного резюме (в чате)
+const FormattedResumeInChat = ({
+   resumeData,
+   messageText,
+}: {
+   resumeData: any
+   messageText: string
+}) => {
+   // Пробуем получить данные из resume или парсим из текста
+   let parsed = null
+   let jsonData = null
+
+   if (resumeData?.content) {
+      try {
+         parsed = JSON.parse(resumeData.content)
+      } catch (e) {
+         console.log('Ошибка парсинга content')
+      }
+   }
+
+   // Извлекаем JSON из текста сообщения
+   jsonData = extractJsonFromText(messageText)
+
+   const resume =
+      parsed?.resume || resumeData?.resume || jsonData?.resume || resumeData
+   const analysis =
+      parsed?.analysis || resumeData?.analysis || jsonData?.analysis
+
+   const formatSalary = (min: number, max: number): string => {
+      if ((!min || min === 0) && (!max || max === 0)) return 'не указана'
+      if (min && min > 0 && max && max > 0)
+         return `${min.toLocaleString('ru-RU')} — ${max.toLocaleString('ru-RU')} ₽`
+      if (min && min > 0) return `от ${min.toLocaleString('ru-RU')} ₽`
+      if (max && max > 0) return `до ${max.toLocaleString('ru-RU')} ₽`
+      return 'не указана'
+   }
+
+   const formatArray = (
+      arr: any[],
+      placeholder: string = 'не указаны',
+   ): string => {
+      if (!arr || arr.length === 0) return placeholder
+      return (
+         arr
+            .filter(
+               (item) => item && item !== 'не указано' && item !== 'не указан',
+            )
+            .join(', ') || placeholder
+      )
+   }
+
+   return (
+      <div style={{ marginTop: '10px', fontSize: '13px' }}>
+         <div style={{ marginBottom: '16px' }}>
+            <h4 style={{ color: '#8c5e91', marginBottom: '12px' }}>
+               📄 Резюме
+            </h4>
+
+            <div style={{ marginBottom: '8px' }}>
+               <strong>Имя:</strong> {resume?.name || 'не указано'}
+            </div>
+
+            <div style={{ marginBottom: '8px' }}>
+               <strong>Город:</strong> {resume?.contact?.city || 'не указан'}
+            </div>
+
+            <div style={{ marginBottom: '8px' }}>
+               <strong>Email:</strong> {resume?.contact?.email || 'не указан'}
+            </div>
+
+            <div style={{ marginBottom: '8px' }}>
+               <strong>О себе:</strong> {resume?.summary || 'не указано'}
+            </div>
+
+            <div style={{ marginBottom: '8px' }}>
+               <strong>Навыки:</strong>
+               <div style={{ marginLeft: '20px', marginTop: '4px' }}>
+                  <div>💻 Hard skills: {formatArray(resume?.skills?.hard)}</div>
+                  <div>🤝 Soft skills: {formatArray(resume?.skills?.soft)}</div>
+               </div>
+            </div>
+
+            <div style={{ marginBottom: '8px' }}>
+               <strong>Образование:</strong> {resume?.education || 'не указано'}
+            </div>
+
+            <div style={{ marginBottom: '8px' }}>
+               <strong>Опыт работы:</strong>{' '}
+               {resume?.experience && resume.experience.length > 0
+                  ? resume.experience.map((exp: any, idx: number) => (
+                       <div
+                          key={idx}
+                          style={{ marginLeft: '20px', marginTop: '4px' }}
+                       >
+                          {typeof exp === 'string'
+                             ? exp
+                             : `${exp.position || ''} в ${exp.company || ''}`}
+                       </div>
+                    ))
+                  : 'не указан'}
+            </div>
+
+            <div style={{ marginBottom: '8px' }}>
+               <strong>Целевая позиция:</strong>{' '}
+               {resume?.targetPosition || 'не указана'}
+            </div>
+         </div>
+
+         {analysis && (
+            <div style={{ marginBottom: '16px' }}>
+               <h4 style={{ color: '#8c5e91', marginBottom: '12px' }}>
+                  📊 Карьерный анализ
+               </h4>
+
+               <div style={{ marginBottom: '8px' }}>
+                  <strong>Позиция сейчас:</strong>{' '}
+                  {analysis.currentPosition || 'не определена'}
+               </div>
+
+               <div style={{ marginBottom: '8px' }}>
+                  <strong>Зарплата сейчас:</strong>{' '}
+                  {formatSalary(
+                     analysis.currentSalaryMin,
+                     analysis.currentSalaryMax,
+                  )}
+               </div>
+
+               <div style={{ marginBottom: '8px' }}>
+                  <strong>Позиция через 6-12 месяцев:</strong>{' '}
+                  {analysis.futurePosition || 'не определена'}
+               </div>
+
+               <div style={{ marginBottom: '8px' }}>
+                  <strong>Зарплата в будущем:</strong>{' '}
+                  {formatSalary(
+                     analysis.futureSalaryMin,
+                     analysis.futureSalaryMax,
+                  )}
+               </div>
+
+               <div style={{ marginBottom: '8px' }}>
+                  <strong>Чего не хватает:</strong>{' '}
+                  {formatArray(analysis.missingSkills, 'не указано')}
+               </div>
+
+               <div style={{ marginBottom: '8px' }}>
+                  <strong>Рекомендации:</strong>{' '}
+                  {formatArray(analysis.recommendations, 'не указано')}
+               </div>
+
+               <div style={{ marginBottom: '8px' }}>
+                  <strong>План обучения:</strong>{' '}
+                  {analysis.learningPath || 'не определен'}
+               </div>
+            </div>
+         )}
+      </div>
+   )
+}
+
+// Компонент для отображения JSON в модальном окне
+const JsonViewer = ({ messageText }: { messageText: string }) => {
+   const jsonData = extractJsonFromText(messageText)
+
+   const copyToClipboard = () => {
+      navigator.clipboard.writeText(JSON.stringify(jsonData, null, 2))
+      const notification = document.createElement('div')
+      notification.textContent = '✅ JSON скопирован!'
+      notification.style.cssText = `
+         position: fixed;
+         bottom: 20px;
+         right: 20px;
+         background: #8c5e91;
+         color: white;
+         padding: 8px 16px;
+         border-radius: 8px;
+         font-size: 14px;
+         z-index: 1000;
+      `
+      document.body.appendChild(notification)
+      setTimeout(() => notification.remove(), 2000)
+   }
+
+   return (
+      <div style={{ padding: '20px' }}>
+         <div
+            style={{
+               display: 'flex',
+               justifyContent: 'space-between',
+               alignItems: 'center',
+               marginBottom: '16px',
+            }}
+         >
+            <span style={{ color: '#8c5e91', fontSize: '12px' }}>
+               JSON ({Object.keys(jsonData || {}).length} полей)
+            </span>
+            <button
+               onClick={copyToClipboard}
+               style={{
+                  padding: '6px 12px',
+                  background: '#4a4a4a',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+               }}
+            >
+               📋 Копировать
+            </button>
+         </div>
+         <pre
+            style={{
+               background: '#1e1e1e',
+               padding: '16px',
+               borderRadius: '8px',
+               overflow: 'auto',
+               maxHeight: '60vh',
+               fontSize: '12px',
+               color: '#d4d4d4',
+               margin: 0,
+            }}
+         >
+            {JSON.stringify(jsonData, null, 2)}
+         </pre>
+      </div>
+   )
+}
+
 function MainPage() {
    const [sidebarOpen, setSidebarOpen] = useState(false)
    const [messages, setMessages] = useState<Message[]>([
@@ -203,7 +467,7 @@ function MainPage() {
    const [currentSessionId, setCurrentSessionId] = useState<string | null>(null)
    const [showSessions, setShowSessions] = useState(false)
    const [showResumeModal, setShowResumeModal] = useState(false)
-   const [selectedResume, setSelectedResume] = useState<any>(null)
+   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
 
    const textareaRef = useRef<HTMLTextAreaElement>(null)
    const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -214,10 +478,11 @@ function MainPage() {
    // ============================================
    // ГЕНЕРАЦИЯ PDF
    // ============================================
-   const downloadPDF = (resumeData: any) => {
+   const downloadPDF = (resumeData: any, messageText: string) => {
       console.log('PDF DATA:', resumeData)
 
       let parsed = null
+      let jsonData = extractJsonFromText(messageText)
 
       if (resumeData?.content) {
          try {
@@ -228,25 +493,13 @@ function MainPage() {
          }
       }
 
-      const resume = parsed?.resume || resumeData?.resume || resumeData
-      const analysis = parsed?.analysis || resumeData?.analysis
+      const resume =
+         parsed?.resume || resumeData?.resume || jsonData?.resume || resumeData
+      const analysis =
+         parsed?.analysis || resumeData?.analysis || jsonData?.analysis
 
       console.log('FINAL RESUME:', resume)
       console.log('FINAL ANALYSIS:', analysis)
-
-      // Вспомогательная функция для проверки наличия данных
-      // const hasData = (value: any): boolean => {
-      //    if (!value) return false
-      //    if (typeof value === 'string')
-      //       return (
-      //          value.trim() !== '' &&
-      //          value !== 'не указано' &&
-      //          value !== 'Не указано'
-      //       )
-      //    if (Array.isArray(value)) return value.length > 0
-      //    if (typeof value === 'object') return Object.keys(value).length > 0
-      //    return !!value
-      // }
 
       // Форматирование зарплаты
       const formatSalary = (min: number, max: number): string | null => {
@@ -781,8 +1034,8 @@ function MainPage() {
       })
    }
 
-   const showResumeDetails = (resume: any) => {
-      setSelectedResume(resume)
+   const showResumeDetails = (message: Message) => {
+      setSelectedMessage(message)
       setShowResumeModal(true)
    }
 
@@ -1156,7 +1409,7 @@ function MainPage() {
                         color: '#848484',
                      }}
                   >
-                     💬 сессия активна
+                     💬 сессия
                   </span>
                )}
                <button
@@ -1170,6 +1423,7 @@ function MainPage() {
             <div className="chatMessages">
                {messages.map((msg, index) => {
                   console.log('MSG.RESUME:', msg.resume)
+                  const hasResume = msg.resume || extractJsonFromText(msg.text)
 
                   return (
                      <div
@@ -1177,49 +1431,57 @@ function MainPage() {
                         className={`message ${msg.sender}`}
                      >
                         <FormattedMessage text={msg.text} />
-                        {msg.resume && (
-                           <div
-                              style={{
-                                 marginTop: '10px',
-                                 padding: '8px',
-                                 background: '#212121',
-                                 borderRadius: '8px',
-                                 fontSize: '11px',
-                                 borderLeft: '2px solid #8c5e91',
-                              }}
-                           >
-                              📄 Резюме сформировано!
-                              <button
-                                 onClick={() => showResumeDetails(msg.resume)}
+                        {hasResume && msg.sender === 'ai' && (
+                           <>
+                              <FormattedResumeInChat
+                                 resumeData={msg.resume}
+                                 messageText={msg.text}
+                              />
+                              <div
                                  style={{
-                                    marginLeft: '10px',
-                                    padding: '4px 10px',
-                                    background: '#4a4a4a',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '6px',
-                                    cursor: 'pointer',
-                                    fontSize: '10px',
+                                    marginTop: '10px',
+                                    padding: '8px',
+                                    background: '#212121',
+                                    borderRadius: '8px',
+                                    fontSize: '11px',
+                                    borderLeft: '2px solid #8c5e91',
                                  }}
                               >
-                                 Посмотреть
-                              </button>
-                              <button
-                                 onClick={() => downloadPDF(msg.resume)}
-                                 style={{
-                                    marginLeft: '6px',
-                                    padding: '4px 10px',
-                                    background: '#6d4772',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '6px',
-                                    cursor: 'pointer',
-                                    fontSize: '10px',
-                                 }}
-                              >
-                                 📥 Скачать PDF
-                              </button>
-                           </div>
+                                 📄 Резюме сформировано!
+                                 <button
+                                    onClick={() => showResumeDetails(msg)}
+                                    style={{
+                                       marginLeft: '10px',
+                                       padding: '4px 10px',
+                                       background: '#4a4a4a',
+                                       color: 'white',
+                                       border: 'none',
+                                       borderRadius: '6px',
+                                       cursor: 'pointer',
+                                       fontSize: '10px',
+                                    }}
+                                 >
+                                    Посмотреть JSON
+                                 </button>
+                                 <button
+                                    onClick={() =>
+                                       downloadPDF(msg.resume, msg.text)
+                                    }
+                                    style={{
+                                       marginLeft: '6px',
+                                       padding: '4px 10px',
+                                       background: '#6d4772',
+                                       color: 'white',
+                                       border: 'none',
+                                       borderRadius: '6px',
+                                       cursor: 'pointer',
+                                       fontSize: '10px',
+                                    }}
+                                 >
+                                    📥 Скачать PDF
+                                 </button>
+                              </div>
+                           </>
                         )}
                      </div>
                   )
@@ -1310,8 +1572,8 @@ function MainPage() {
             </div>
          </div>
 
-         {/* Модальное окно для резюме */}
-         {showResumeModal && (
+         {/* Модальное окно для JSON */}
+         {showResumeModal && selectedMessage && (
             <div
                className="modal-overlay"
                onClick={() => setShowResumeModal(false)}
@@ -1321,7 +1583,7 @@ function MainPage() {
                   onClick={(e) => e.stopPropagation()}
                >
                   <div className="modal-header">
-                     <h3>📄 Детали резюме</h3>
+                     <h3>📄 JSON резюме</h3>
                      <div
                         style={{
                            display: 'flex',
@@ -1330,7 +1592,12 @@ function MainPage() {
                         }}
                      >
                         <button
-                           onClick={() => downloadPDF(selectedResume)}
+                           onClick={() =>
+                              downloadPDF(
+                                 selectedMessage.resume,
+                                 selectedMessage.text,
+                              )
+                           }
                            style={{
                               padding: '6px 12px',
                               background: '#6d4772',
@@ -1352,9 +1619,7 @@ function MainPage() {
                      </div>
                   </div>
                   <div className="modal-body">
-                     <pre className="resume-json">
-                        {JSON.stringify(selectedResume, null, 2)}
-                     </pre>
+                     <JsonViewer messageText={selectedMessage.text} />
                   </div>
                </div>
             </div>
