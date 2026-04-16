@@ -1,40 +1,40 @@
 @font-face {
-  font-family: 'Oswald';
-  src: url('../../assets/fonts/Oswald.woff');
+   font-family: 'Oswald';
+   src: url('../../assets/fonts/Oswald.woff');
 }
 
 p {
-  margin: 0;
+   margin: 0;
 }
 
 a {
-  text-decoration: none;
-  color: rgb(199, 163, 95);
+   text-decoration: none;
+   color: rgb(199, 163, 95);
 }
 
 .login {
-  height: auto;
-  width: 100vw;
-  /* overflow-x: hidden; */
-  /* background: url('../../assets/img/thirdBG.jpg');
+   height: auto;
+   width: 100vw;
+   /* overflow-x: hidden; */
+   /* background: url('../../assets/img/thirdBG.jpg');
   background-position: cover; */
 }
 
 #hiContainer {
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.3) 0%,
-      /* Начало */ rgba(0, 0, 0, 0.3) 15%,
-      /* Плавное изменение */ rgba(0, 0, 0, 0.3) 30%,
-      /* Постепенно светлеет */ rgba(0, 0, 0, 0.2) 50%,
-      /* Еще светлее */ rgba(245, 222, 179, 0.2) 70%,
-      /* Начинает появляться бежевый */ rgba(202, 186, 156, 0.7) 85%,
-      /* Почти полностью бежевый */ rgba(245, 222, 179, 1) 100%
-        /* Конечный цвет */
-    ),
-    url('../../assets/img/thirdBG.jpg');
-  background-size: cover;
+   background:
+      linear-gradient(
+         to bottom,
+         rgba(0, 0, 0, 0.3) 0%,
+         /* Начало */ rgba(0, 0, 0, 0.3) 15%,
+         /* Плавное изменение */ rgba(0, 0, 0, 0.3) 30%,
+         /* Постепенно светлеет */ rgba(0, 0, 0, 0.2) 50%,
+         /* Еще светлее */ rgba(245, 222, 179, 0.2) 70%,
+         /* Начинает появляться бежевый */ rgba(202, 186, 156, 0.7) 85%,
+         /* Почти полностью бежевый */ rgba(245, 222, 179, 1) 100%
+            /* Конечный цвет */
+      ),
+      url('../../assets/img/thirdBG.jpg');
+   background-size: cover;
 }
 
 /* #bg-video {
@@ -56,366 +56,367 @@ a {
 } */
 
 .animation {
-  background-color: #68ffde;
-  border: none;
-  border-radius: 20px;
-  height: 30px;
-  color: rgb(150, 150, 150);
+   background-color: #68ffde;
+   border: none;
+   border-radius: 20px;
+   height: 30px;
+   color: rgb(150, 150, 150);
 }
 
 .login {
-  /* overflow: hidden; */
+   /* overflow: hidden; */
 }
 
 .loginMenu {
-  width: 100%;
-  height: 3rem;
+   width: 100%;
+   height: 3rem;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* бургер слева, кнопки справа */
+   display: flex;
+   align-items: center;
+   justify-content: space-between; /* бургер слева, кнопки справа */
 
-  background-color: rgb(245, 222, 179, 0.2);
+   background-color: rgb(245, 222, 179, 0.2);
 }
 
 .loginButtons {
-  display: flex;
-  gap: 15px; /* расстояние между кнопками */
-  margin-right: 10px;
+   display: flex;
+   gap: 15px; /* расстояние между кнопками */
+   margin-right: 10px;
 }
 
 .menuBurger {
-  background: none;
-  border: none;
-  width: 2rem;
+   background: none;
+   border: none;
+   width: 2rem;
 }
 
 .contentWrapper {
-  margin-top: 30vh;
-  margin-bottom: 20vh;
-  overflow: hidden;
-  justify-items: center;
+   margin-top: 30vh;
+   margin-bottom: 20vh;
+   overflow: hidden;
+   justify-items: center;
 }
 
 .mainContainer {
-  /* background:
+   /* background:
     linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url('../../assets/img/sixthBg.jpg') no-repeat;
   background-size: cover; */
 
-  background: rgb(245, 222, 179);
-  background-attachment: cover;
-  backdrop-filter: blur(100px);
+   background: rgb(245, 222, 179);
+   background-attachment: cover;
+   backdrop-filter: blur(100px);
 
-  color: var(--purple-color);
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
+   color: var(--purple-color);
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+   display: flex;
+   flex-direction: column;
+   gap: 3rem;
 
-  height: fit-content;
-  justify-content: center;
-  align-items: center;
+   height: fit-content;
+   justify-content: center;
+   align-items: center;
 }
 
 .containerPhoto {
-  width: 50rem;
-  height: 100%;
-  border-radius: 20px;
+   width: 50rem;
+   height: 100%;
+   border-radius: 20px;
 }
 
 .mainContainerPanel {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  justify-content: space-between;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   justify-content: space-between;
 
-  width: 80vw;
-  height: 50vh;
-  background: rgba(255, 255, 255, 0.15); /* Полупрозрачный белый */
-  backdrop-filter: blur(12px); /* Размытие фона позади */
-  -webkit-backdrop-filter: blur(12px); /* Для Safari */
+   width: 80vw;
+   height: 50vh;
+   background: rgba(255, 255, 255, 0.15); /* Полупрозрачный белый */
+   backdrop-filter: blur(12px); /* Размытие фона позади */
+   -webkit-backdrop-filter: blur(12px); /* Для Safari */
 
-  border-radius: 16px; /* Закругленные углы */
-  border: 1px solid rgba(255, 255, 255, 0.3); /* Тонкая белая рамка */
+   border-radius: 16px; /* Закругленные углы */
+   border: 1px solid rgba(255, 255, 255, 0.3); /* Тонкая белая рамка */
 
-  box-shadow:
-    0 4px 30px rgba(0, 0, 0, 0.1),
-    /* Внешняя тень */ inset 0 0 0 1px rgba(255, 255, 255, 0.2); /* Внутренняя подсветка */
+   box-shadow:
+      0 4px 30px rgba(0, 0, 0, 0.1),
+      /* Внешняя тень */ inset 0 0 0 1px rgba(255, 255, 255, 0.2); /* Внутренняя подсветка */
 
-  padding: 24px;
+   padding: 24px;
 }
 
 .mainContainerTexts {
-  font-size: 2rem;
+   font-size: 2rem;
 }
 .containerPanelDescription {
-  font-size: 1.5rem;
-  padding: 20px;
+   font-size: 1.5rem;
+   padding: 20px;
 }
 
 .text1 {
-  margin: 0;
-  opacity: 1;
+   margin: 0;
+   opacity: 1;
 
-  font-size: 8rem;
-  color: wheat;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+   font-size: 8rem;
+   color: wheat;
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .descrition1 {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  color: wheat;
-  font-size: 1rem;
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+   color: wheat;
+   font-size: 1rem;
 }
 
 .tipacub {
-  position: absolute;
-  /* transform: translate(50%, 50%); */
-  background-color: #01ddff;
-  line-height: 1rem;
-  font-size: large;
-  color: transparent;
-  /* transition: all ease 1s; */
+   position: absolute;
+   /* transform: translate(50%, 50%); */
+   background-color: #01ddff;
+   line-height: 1rem;
+   font-size: large;
+   color: transparent;
+   /* transition: all ease 1s; */
 }
 #endContainer {
-  background:
-    linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.3) 0%,
-      /* Начало */ rgba(0, 0, 0, 0.3) 15%,
-      /* Плавное изменение */ rgba(0, 0, 0, 0.3) 30%,
-      /* Постепенно светлеет */ rgba(0, 0, 0, 0.2) 50%,
-      /* Еще светлее */ rgba(245, 222, 179, 0.2) 70%,
-      /* Начинает появляться бежевый */ rgba(202, 186, 156, 0.7) 85%,
-      /* Почти полностью бежевый */ rgba(245, 222, 179, 1) 100%
-        /* Конечный цвет */
-    ),
-    url('../../assets/img/last.jpg');
-  background-size: cover;
-  /* outline: 1px solid forestgreen; */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+   background:
+      linear-gradient(
+         to top,
+         rgba(0, 0, 0, 0.3) 0%,
+         /* Начало */ rgba(0, 0, 0, 0.3) 15%,
+         /* Плавное изменение */ rgba(0, 0, 0, 0.3) 30%,
+         /* Постепенно светлеет */ rgba(0, 0, 0, 0.2) 50%,
+         /* Еще светлее */ rgba(245, 222, 179, 0.2) 70%,
+         /* Начинает появляться бежевый */ rgba(202, 186, 156, 0.7) 85%,
+         /* Почти полностью бежевый */ rgba(245, 222, 179, 1) 100%
+            /* Конечный цвет */
+      ),
+      url('../../assets/img/last.jpg');
+   background-size: cover;
+   /* outline: 1px solid forestgreen; */
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
 
-  color: wheat;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+   color: wheat;
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-evenly;
 }
 
 .endText {
-  font-size: 2rem;
+   font-size: 2rem;
 }
 
 /* Анимированное свечение */
 .pulsing-glow {
-  box-shadow: 0 0 20px 5px rgba(255, 0, 128, 0.7);
+   box-shadow: 0 0 20px 5px rgba(255, 0, 128, 0.7);
 
-  animation: pulse 2s infinite;
+   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 20px 5px rgba(252, 255, 234, 0.7);
-  }
-  50% {
-    box-shadow: 0 0 40px 10px rgba(243, 255, 175, 0.7);
-  }
+   0%,
+   100% {
+      box-shadow: 0 0 20px 5px rgba(252, 255, 234, 0.7);
+   }
+   50% {
+      box-shadow: 0 0 40px 10px rgba(243, 255, 175, 0.7);
+   }
 }
 
 .scene {
-  min-height: 100vh;
-  position: relative;
+   min-height: 100vh;
+   position: relative;
 }
 
 .buttons {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+   display: flex;
+   gap: 1rem;
+   margin-top: 1rem;
 }
 
 .button {
-  border: none;
-  border-radius: 20px;
-  width: fit-content;
-  font-size: 1rem;
-  padding: 12px;
-  font-weight: 600;
-  transition: all ease 0.3s;
+   border: none;
+   border-radius: 20px;
+   width: fit-content;
+   font-size: 1rem;
+   padding: 12px;
+   font-weight: 600;
+   transition: all ease 0.3s;
 }
 
 .auth {
-  color: bisque;
-  background-color: var(--purple-color);
+   color: bisque;
+   background-color: var(--purple-color);
 }
 
 .auth:hover {
-  background-color: #b278b9;
-  color: rgb(252, 229, 187);
-  transform: scale(1.1);
+   background-color: #b278b9;
+   color: rgb(252, 229, 187);
+   transform: scale(1.1);
 }
 
 .reg {
-  background-color: var(--primary-color);
-  color: var(--purple-color);
+   background-color: var(--primary-color);
+   color: var(--purple-color);
 }
 
 .reg:hover {
-  color: #76487b;
-  background-color: rgb(218, 188, 134);
-  transform: scale(1.1);
+   color: #76487b;
+   background-color: rgb(218, 188, 134);
+   transform: scale(1.1);
 }
 
 .contact-information {
-  text-align: center;
-  opacity: 0.7;
-  position: relative;
-  top: 100px;
+   text-align: center;
+   opacity: 0.7;
+   position: relative;
+   top: 100px;
 }
 
 /* =========================
    📱 Tablets (до 1024px)
 ========================= */
 @media (max-width: 1024px) {
-  .text1 {
-    font-size: 5rem;
-  }
+   .text1 {
+      font-size: 5rem;
+   }
 
-  .containerPanelDescription {
-    font-size: 1.2rem;
-  }
+   .containerPanelDescription {
+      font-size: 1.2rem;
+   }
 
-  .mainContainerPanel {
-    width: 90vw;
-    height: 80vh;
-    flex-direction: column;
-    /* grid-template-columns: 1fr; вместо 2 колонок */
-    gap: 1.5rem;
-  }
+   .mainContainerPanel {
+      width: 90vw;
+      height: 80vh;
+      flex-direction: column;
+      /* grid-template-columns: 1fr; вместо 2 колонок */
+      gap: 1.5rem;
+   }
 
-  .containerPhoto {
-    width: 50%;
-    height: 70vh;
-  }
+   .containerPhoto {
+      width: 50%;
+      height: 70vh;
+   }
 }
 
 /* =========================
    📱 Small tablets / large phones (до 768px)
 ========================= */
 @media (max-width: 768px) {
-  .text1 {
-    font-size: 3.5rem;
-    text-align: center;
-  }
+   .text1 {
+      font-size: 3.5rem;
+      text-align: center;
+   }
 
-  .descrition1 {
-    font-size: 0.9rem;
-    text-align: center;
-    padding: 0 1rem;
-  }
+   .descrition1 {
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 0 1rem;
+   }
 
-  .containerPanelDescription {
-    font-size: 1rem;
-    text-align: center;
-  }
+   .containerPanelDescription {
+      font-size: 1rem;
+      text-align: center;
+   }
 
-  .mainContainerPanel {
-    padding: 16px;
-  }
+   .mainContainerPanel {
+      padding: 16px;
+   }
 
-  /* .containerPhoto {
+   /* .containerPhoto {
     display: none;
   } */
 
-  .loginMenu {
-    height: auto;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.5rem 0;
-  }
+   .loginMenu {
+      height: auto;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+   }
 
-  .loginButtons {
-    margin-right: 0;
-  }
+   .loginButtons {
+      margin-right: 0;
+   }
 
-  .buttons {
-    flex-direction: column;
-    align-items: center;
-  }
+   .buttons {
+      flex-direction: column;
+      align-items: center;
+   }
 
-  .button {
-    /* width: 80%; */
-    text-align: center;
-  }
+   .button {
+      /* width: 80%; */
+      text-align: center;
+   }
 }
 
 /* =========================
    📱 Phones (до 480px)
 ========================= */
 @media (max-width: 480px) {
-  .text1 {
-    font-size: 2.5rem;
-  }
+   .text1 {
+      font-size: 2.5rem;
+   }
 
-  .descrition1 {
-    font-size: 0.8rem;
-  }
+   .descrition1 {
+      font-size: 0.8rem;
+   }
 
-  .endText {
-    font-size: 1.3rem;
-    text-align: center;
-    padding: 0 1rem;
-  }
+   .endText {
+      font-size: 1.3rem;
+      text-align: center;
+      padding: 0 1rem;
+   }
 
-  .containerPanelDescription {
-    font-size: 1.2rem;
-  }
+   .containerPanelDescription {
+      font-size: 1.2rem;
+   }
 
-  .containerPhoto {
-    display: none;
-  }
+   .containerPhoto {
+      display: none;
+   }
 
-  .mainContainer {
-    padding: 2vw;
-  }
+   .mainContainer {
+      padding: 2vw;
+   }
 
-  .mainContainerPanel {
-    height: fit-content;
-    color: #76487b;
-  }
+   .mainContainerPanel {
+      height: fit-content;
+      color: #76487b;
+   }
 
-  .contact-information {
-    font-size: 0.8rem;
-    top: 50px;
-    padding: 0 1rem;
-  }
+   .contact-information {
+      font-size: 0.8rem;
+      top: 50px;
+      padding: 0 1rem;
+   }
 
-  .contentWrapper {
-    margin-top: 20vh;
-    margin-bottom: 10vh;
-    background: none;
-  }
+   .contentWrapper {
+      text-align: center;
+      margin-top: 20vh;
+      margin-bottom: 10vh;
+      background: none;
+   }
 }
 
 /* =========================
    📱 Очень маленькие экраны (до 360px)
 ========================= */
 @media (max-width: 360px) {
-  .text1 {
-    font-size: 2rem;
-  }
+   .text1 {
+      font-size: 2rem;
+   }
 
-  .button {
-    font-size: 0.8rem;
-    padding: 8px;
-  }
+   .button {
+      font-size: 0.8rem;
+      padding: 8px;
+   }
 
-  .containerPanelDescription {
-    font-size: 0.8rem;
-  }
+   .containerPanelDescription {
+      font-size: 0.8rem;
+   }
 }
