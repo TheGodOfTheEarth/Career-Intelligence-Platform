@@ -1,2 +1,62 @@
-# Career-Intelligence-Platform
-Career Intelligence Platform is a MADI University R&amp;D project. It uses AI to analyze resumes, providing job matches, salary estimates, and skill-gap advice. The project explores modern web technologies while aiming to enhance graduate career readiness.
+<div align="center">
+  <img src="https://s.rbk.ru/v1_companies_s3/media/trademarks/100f4d91-26e2-4409-9689-c91b8539bed5.jpg" alt="MADI University" width="120">
+</div>
+
+<h1 align="center">
+  🧠 Career Intelligence Platform
+</h1>
+
+<p align="center">
+  <strong>Интеллектуальная платформа для карьерного роста</strong><br />
+  Научно-исследовательский проект <strong>МАДИ</strong>
+</p>
+
+<p align="center">
+  🌐 <strong><a href="https://career-intelligence-platform-bura24064-y2aw.onreza.app">Открыть веб-приложение</a></strong> — попробуйте прямо сейчас
+</p>
+
+<br />
+
+## 📌 О проекте
+
+**Career Intelligence Platform** — это R&D-проект **Московского автомобильно-дорожного государственного технического университета (МАДИ)**.
+
+Платформа использует технологии **искусственного интеллекта** для анализа резюме и помогает студентам и выпускникам быстрее ориентироваться на рынке труда.
+
+<br />
+
+## 🤖 Что умеет платформа
+
+| Функция | Описание |
+|---------|----------|
+| 📄 **Анализ резюме** | ИИ извлекает ключевую информацию из текста резюме |
+| 🔍 **Поиск вакансий** | Подбирает подходящие должности под навыки и опыт |
+| 💰 **Оценка зарплаты** | Прогнозирует рыночный уровень дохода |
+| 📈 **Рекомендации** | Советует, какие навыки прокачать для роста |
+| 🎓 **Карьерная готовность** | Повышает шансы выпускников на трудоустройство |
+
+<br />
+
+## 🧪 Научно-исследовательская ценность
+
+В рамках проекта исследуются:
+
+- Применение NLP для анализа неструктурированных резюме
+- Алгоритмы сопоставления навыков и требований рынка
+- Модели прогнозирования зарплат
+- Современные веб-технологии в карьерных сервисах
+- Лёгкий деплой AI-сервисов в облаке
+
+<br />
+
+## 🛠️ Технологии
+
+| Направление | Технологии |
+|-------------|------------|
+| Фронтенд | React / TypeScript / Tailwind |
+| Бэкенд | Node.js / Python (FastAPI) |
+| ИИ | spaCy / Transformers / scikit-learn |
+| Хостинг | Платформа Onreza |
+| Контроль версий | Git / GitHub |
+
+> Точный стек может уточняться по мере развития проекта.
