@@ -1,5 +1,4 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAccount } from '../../contexts/AccountContext'
 import { auth } from '../../api/api'
@@ -13,6 +12,10 @@ function RegisterPage() {
 
   const navigate = useNavigate()
   const { onLogin } = useAccount()
+
+  useEffect(() => {
+    document.title = 'Регистрация — CarIP'
+  }, [])
 
   const handleRegister = async () => {
     setError('')

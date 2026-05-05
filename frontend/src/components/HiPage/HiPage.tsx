@@ -1,9 +1,46 @@
-import React from 'react'
+import { useState, useEffect } from 'react'
 import './HiPage.css'
 import { useNavigate } from 'react-router-dom'
 
+const FaqItem = ({ question, answer }: { question: string; answer: string }) => {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className={`faq-item${open ? ' open' : ''}`} onClick={() => setOpen(!open)}>
+      <div className="faq-question">
+        <span>{question}</span>
+        <span className="faq-arrow">{open ? '−' : '+'}</span>
+      </div>
+      {open && <div className="faq-answer">{answer}</div>}
+    </div>
+  )
+}
+
+const FAQ_ITEMS = [
+  {
+    q: 'Это бесплатно?',
+    a: 'Базовый функционал полностью бесплатен. Создавай резюме и получай карьерный анализ без оплаты.',
+  },
+  {
+    q: 'Как ИИ анализирует мои навыки?',
+    a: 'Ты отвечаешь на вопросы в чате, ИИ собирает данные и сравнивает их с требованиями рынка труда.',
+  },
+  {
+    q: 'Можно ли отредактировать резюме после генерации?',
+    a: 'Да, после генерации доступен визуальный редактор с тремя шаблонами оформления.',
+  },
+  {
+    q: 'В каком формате можно скачать резюме?',
+    a: 'Резюме выгружается в формате PDF с выбором стиля оформления.',
+  },
+]
+
 function HiPage() {
   const navigate = useNavigate()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  useEffect(() => {
+    document.title = 'CarIP — ИИ помощник для карьеры'
+  }, [])
 
   return (
     <div className="landing">
@@ -12,7 +49,7 @@ function HiPage() {
         <div className="nav-logo">
           Car<span>IP</span>
         </div>
-        <div className="nav-actions">
+        <div className={`nav-actions${mobileMenuOpen ? ' open' : ''}`}>
           <button className="btn-ghost" onClick={() => navigate('/login')}>
             Войти
           </button>
@@ -20,12 +57,19 @@ function HiPage() {
             Зарегистрироваться
           </button>
         </div>
+        <button
+          className="nav-burger"
+          onClick={() => setMobileMenuOpen((v) => !v)}
+          aria-label="Меню"
+        >
+          {mobileMenuOpen ? '✕' : '☰'}
+        </button>
       </nav>
 
       {/* Hero */}
       <section className="hero">
         <div className="hero-glow" aria-hidden="true" />
-        <div className="hero-badge">✦ ИИ-платформа для карьерного роста</div>
+        <div className="hero-badge">◆ ИИ-платформа для карьерного роста</div>
         <h1>
           Создай резюме с помощью{' '}
           <span className="highlight">искусственного интеллекта</span>
@@ -45,7 +89,7 @@ function HiPage() {
         <h2 className="section-title">Всё что нужно для карьеры</h2>
         <div className="features-grid">
           <div className="feature-card">
-            <div className="feature-icon">🤖</div>
+            <div className="feature-icon">AI</div>
             <h3>ИИ-анализ навыков</h3>
             <p>
               Умный алгоритм оценивает твои компетенции и сравнивает с
@@ -53,7 +97,7 @@ function HiPage() {
             </p>
           </div>
           <div className="feature-card">
-            <div className="feature-icon">📄</div>
+            <div className="feature-icon">CV</div>
             <h3>Готовое резюме за 5 минут</h3>
             <p>
               Просто ответь на вопросы — ИИ сформирует профессиональное резюме
@@ -61,12 +105,34 @@ function HiPage() {
             </p>
           </div>
           <div className="feature-card">
-            <div className="feature-icon">📈</div>
+            <div className="feature-icon">↑$</div>
             <h3>Карьерный план и зарплатные вилки</h3>
             <p>
               Узнай текущую рыночную стоимость и получи конкретный план роста с
               реальными цифрами
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="stats-section">
+        <div className="stats-grid">
+          <div className="stat-item">
+            <div className="stat-number">5 мин</div>
+            <div className="stat-label">до готового резюме</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-number">3 шаблона</div>
+            <div className="stat-label">PDF на выбор</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-number">ИИ</div>
+            <div className="stat-label">анализирует навыки</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-number">100%</div>
+            <div className="stat-label">бесплатно</div>
           </div>
         </div>
       </section>
@@ -197,6 +263,16 @@ function HiPage() {
           <button className="btn-cta-ghost" onClick={() => navigate('/login')}>
             Уже есть аккаунт
           </button>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="faq-section">
+        <h2>Часто задаваемые вопросы</h2>
+        <div className="faq-list">
+          {FAQ_ITEMS.map((item, i) => (
+            <FaqItem key={i} question={item.q} answer={item.a} />
+          ))}
         </div>
       </section>
 

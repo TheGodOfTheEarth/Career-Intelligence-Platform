@@ -7,6 +7,7 @@ import HiPage from './components/HiPage/HiPage'
 import LoginPage from './components/LoginPage/LoginPage'
 import RegisterPage from './components/RegisterPage/RegisterPage'
 import MainPage from './components/MainPage/MainPage'
+import ResumeEditor from './components/ResumeEditor/ResumeEditor'
 
 function App() {
    return (
@@ -42,6 +43,14 @@ function App() {
                   element={
                      <ProtectedRoute>
                         <MainPage />
+                     </ProtectedRoute>
+                  }
+               />
+               <Route
+                  path="/resume/:id"
+                  element={
+                     <ProtectedRoute>
+                        <ResumeEditor />
                      </ProtectedRoute>
                   }
                />

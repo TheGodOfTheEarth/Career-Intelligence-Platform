@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAccount } from '../../contexts/AccountContext'
 import { auth } from '../../api/api'
@@ -11,6 +11,10 @@ function LoginPage() {
 
    const navigate = useNavigate()
    const { onLogin } = useAccount()
+
+   useEffect(() => {
+      document.title = 'Вход — CarIP'
+   }, [])
 
    const handleLogin = async () => {
       setError('')

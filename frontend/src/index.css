@@ -16,6 +16,12 @@
    --msg-ai: #1e1e1e;
    --msg-user: #2d1f3d;
 
+   --session-active: #303030;
+   --session-hover: #2a2a2a;
+   --chat-input-bg: #303030;
+   --chat-input-text: #f1f1f1;
+   --chat-input-border: transparent;
+
    /* legacy aliases */
    --primary-color: #f1f1f1;
    --purple-color: #8c5e91;
@@ -33,6 +39,8 @@
    --sidebar-bg: #f0ebff;
    --msg-ai: #f5f0ff;
    --msg-user: #ede9fe;
+   --session-active: rgba(140, 94, 145, 0.12);
+   --session-hover: rgba(140, 94, 145, 0.07);
 }
 
 *,

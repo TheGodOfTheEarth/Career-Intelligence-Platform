@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAccount } from '../../contexts/AccountContext'
 import { chat } from '../../api/api'
+import ReactMarkdown from 'react-markdown'
 import './MainPage.css'
 
 type Message = {
@@ -9,6 +10,7 @@ type Message = {
    sender: 'user' | 'ai'
    id?: string
    resume?: any | null
+   timestamp?: string
 }
 
 type SessionMessage = {
@@ -27,6 +29,7 @@ type Session = {
    createdAt: string
    updatedAt?: string
    userId?: string
+   resume?: { targetPosition?: string } | null
 }
 
 // Компонент для форматирования сообщений с кодом (НЕ показывает JSON)
@@ -47,7 +50,7 @@ const FormattedMessage = ({ text }: { text: string }) => {
       navigator.clipboard.writeText(decodedCode)
 
       const notification = document.createElement('div')
-      notification.textContent = '✅ Код скопирован!'
+      notification.textContent = '✓ Код скопирован!'
       notification.style.cssText = `
          position: fixed;
          bottom: 20px;
@@ -64,8 +67,17 @@ const FormattedMessage = ({ text }: { text: string }) => {
       setTimeout(() => notification.remove(), 2000)
    }
 
+   const cleanText = (text: string) => {
+      return text
+         .replace(/[□■▪▫◆◇]/g, '')
+         .replace(/🖥/g, '')
+         .replace(/[■-◿]/g, '')
+         .trim()
+   }
+
    const processText = (rawText: string) => {
       let processedText = decodeHtmlEntities(rawText)
+      processedText = cleanText(processedText)
       return processedText
    }
 
@@ -79,12 +91,7 @@ const FormattedMessage = ({ text }: { text: string }) => {
             const processedText = processText(plainText)
             parts.push(
                <div key={`text-${lastIndex}`} className="plain-text">
-                  {processedText.split('\n').map((line, i) => (
-                     <span key={i}>
-                        {line}
-                        {i < processedText.split('\n').length - 1 && <br />}
-                     </span>
-                  ))}
+                  <ReactMarkdown>{processedText}</ReactMarkdown>
                </div>,
             )
          }
@@ -97,12 +104,7 @@ const FormattedMessage = ({ text }: { text: string }) => {
          const processedText = processText(plainText)
          parts.push(
             <div key={`text-${lastIndex}`} className="plain-text">
-               {processedText.split('\n').map((line, i) => (
-                  <span key={i}>
-                     {line}
-                     {i < processedText.split('\n').length - 1 && <br />}
-                  </span>
-               ))}
+               <ReactMarkdown>{processedText}</ReactMarkdown>
             </div>,
          )
       }
@@ -196,12 +198,7 @@ const FormattedMessage = ({ text }: { text: string }) => {
       const processedText = processText(remainingText)
       parts.push(
          <div key={`text-end`} className="plain-text">
-            {processedText.split('\n').map((line, i) => (
-               <span key={i}>
-                  {line}
-                  {i < processedText.split('\n').length - 1 && <br />}
-               </span>
-            ))}
+            <ReactMarkdown>{processedText}</ReactMarkdown>
          </div>,
       )
    }
@@ -391,7 +388,7 @@ const JsonViewer = ({ messageText }: { messageText: string }) => {
    const copyToClipboard = () => {
       navigator.clipboard.writeText(JSON.stringify(jsonData, null, 2))
       const notification = document.createElement('div')
-      notification.textContent = '✅ JSON скопирован!'
+      notification.textContent = '✓ JSON скопирован!'
       notification.style.cssText = `
          position: fixed;
          bottom: 20px;
@@ -471,11 +468,15 @@ function MainPage() {
    const [showSessions, setShowSessions] = useState(false)
    const [showResumeModal, setShowResumeModal] = useState(false)
    const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
+   const [showScrollBtn, setShowScrollBtn] = useState(false)
+   const [sessionsLoading, setSessionsLoading] = useState(true)
 
    const textareaRef = useRef<HTMLTextAreaElement>(null)
    const messagesEndRef = useRef<HTMLDivElement>(null)
+   const chatMessagesRef = useRef<HTMLDivElement>(null)
 
    const navigate = useNavigate()
+   const [searchParams] = useSearchParams()
    const { account, onLogout } = useAccount()
 
    // ============================================
@@ -1043,7 +1044,14 @@ function MainPage() {
    }
 
    const scrollToBottom = () => {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+   }
+
+   const handleMessagesScroll = () => {
+      const el = chatMessagesRef.current
+      if (!el) return
+      const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight
+      setShowScrollBtn(distanceFromBottom > 200)
    }
 
    useEffect(() => {
@@ -1060,6 +1068,7 @@ function MainPage() {
    }
 
    const loadSessions = async (compress = false) => {
+      setSessionsLoading(true)
       try {
          const data = await chat.getSessions(
             compress ? currentSessionId || undefined : undefined,
@@ -1067,6 +1076,8 @@ function MainPage() {
          setSessions(data.sessions || [])
       } catch (error) {
          console.error('Ошибка загрузки сессий:', error)
+      } finally {
+         setSessionsLoading(false)
       }
    }
 
@@ -1076,6 +1087,13 @@ function MainPage() {
          const data = await chat.getSession(sessionId)
 
          let formattedMessages: Message[] = []
+
+         const fmtTime = (iso?: string) => {
+            if (!iso) return undefined
+            try {
+               return new Date(iso).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
+            } catch { return undefined }
+         }
 
          if (
             data.session &&
@@ -1087,6 +1105,7 @@ function MainPage() {
                text: msg.content || msg.text || '',
                sender: msg.role === 'user' ? 'user' : 'ai',
                resume: msg.resume || null,
+               timestamp: fmtTime(msg.createdAt),
             }))
          } else if (data.messages && Array.isArray(data.messages)) {
             formattedMessages = data.messages.map((msg: any) => ({
@@ -1094,6 +1113,7 @@ function MainPage() {
                text: msg.content || msg.text || '',
                sender: msg.role === 'user' ? 'user' : 'ai',
                resume: msg.resume || null,
+               timestamp: fmtTime(msg.createdAt),
             }))
          } else if (Array.isArray(data)) {
             formattedMessages = data.map((msg: any) => ({
@@ -1101,6 +1121,7 @@ function MainPage() {
                text: msg.content || msg.text || '',
                sender: msg.role === 'user' ? 'user' : 'ai',
                resume: msg.resume || null,
+               timestamp: fmtTime(msg.createdAt),
             }))
          }
 
@@ -1111,6 +1132,18 @@ function MainPage() {
                   sender: 'ai',
                },
             ]
+         }
+
+         // Resume is stored separately from messages — attach it to the last AI message
+         const sessionResume = data.session?.resume || null
+         if (sessionResume && formattedMessages.length > 0) {
+            const lastAiIdx = [...formattedMessages.map((m) => m.sender)].lastIndexOf('ai')
+            if (lastAiIdx !== -1) {
+               formattedMessages[lastAiIdx] = {
+                  ...formattedMessages[lastAiIdx],
+                  resume: sessionResume,
+               }
+            }
          }
 
          setMessages(formattedMessages)
@@ -1150,9 +1183,11 @@ function MainPage() {
    const handleSend = async () => {
       if (!input.trim() || loading) return
 
+      const nowTime = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
       const userMessage: Message = {
          text: input.trim(),
          sender: 'user',
+         timestamp: nowTime,
       }
 
       setMessages((prev) => [...prev, userMessage])
@@ -1190,6 +1225,7 @@ function MainPage() {
             text: response.message || '',
             sender: 'ai',
             resume: response.resume || parsedResume,
+            timestamp: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
          }
 
          console.log('AI MESSAGE:', aiMessage)
@@ -1202,15 +1238,24 @@ function MainPage() {
          if (error.status === 401) {
             onLogout()
             navigate('/')
-         } else {
-            const errorMessage: Message = {
-               text: 'Извините, произошла ошибка. Попробуйте позже.',
+         } else if (error.message?.includes('ИИ') || error.message?.includes('AI') || error.message?.includes('ai')) {
+            setMessages((prev) => [...prev, {
+               text: 'ИИ временно недоступен. Попробуйте через несколько секунд.',
                sender: 'ai',
-            }
-            setMessages((prev) => [...prev, errorMessage])
+               timestamp: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+            }])
+         } else {
+            setMessages((prev) => [...prev, {
+               text: 'Произошла ошибка соединения. Проверьте интернет и попробуйте снова.',
+               sender: 'ai',
+               timestamp: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+            }])
          }
       } finally {
          setLoading(false)
+         setTimeout(() => {
+            textareaRef.current?.focus()
+         }, 100)
       }
    }
 
@@ -1227,6 +1272,7 @@ function MainPage() {
    }
 
    const handleDeleteSession = async (sessionId: string) => {
+      if (!window.confirm('Удалить этот диалог?')) return
       try {
          await chat.deleteSession(sessionId, currentSessionId || undefined)
          await loadSessions()
@@ -1250,10 +1296,25 @@ function MainPage() {
       localStorage.setItem('theme', theme)
    }, [theme])
 
+   useEffect(() => {
+      if (currentSessionId) {
+         const session = sessions.find((s) => s.id === currentSessionId)
+         document.title = session?.title
+            ? `${session.title} — CarIP`
+            : 'Чат — CarIP'
+      } else {
+         document.title = 'Career Intelligence Platform'
+      }
+   }, [currentSessionId, sessions])
+
    const toggleTheme = () =>
       setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
 
    useEffect(() => {
+      const sessionIdFromUrl = searchParams.get('sessionId')
+      if (sessionIdFromUrl) {
+         loadSession(sessionIdFromUrl)
+      }
       loadSessions()
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [])
@@ -1270,10 +1331,15 @@ function MainPage() {
             </button>
             <div className="sidebarGreeting">
                <div className="sidebarAvatar">
-                  {(account?.name || account?.email || 'U')
-                     .trim()
-                     .charAt(0)
-                     .toUpperCase()}
+                  {((name: string) =>
+                     name
+                        .trim()
+                        .split(/\s+/)
+                        .map((n) => n[0])
+                        .join('')
+                        .toUpperCase()
+                        .slice(0, 2)
+                  )(account?.name || account?.email || 'U')}
                </div>
                <div className="sidebarGreetingText">
                   <div className="sidebarGreetingName">
@@ -1294,14 +1360,14 @@ function MainPage() {
                      setShowSessions(!showSessions)
                   }}
                >
-                  📋 {showSessions ? 'Скрыть историю' : 'История чатов'}
+                  ≡ {showSessions ? 'Скрыть историю' : 'История чатов'}
                </button>
 
                <button
                   className="sidebarBtn sidebarBtnPrimary"
                   onClick={createNewSession}
                >
-                  ✨ Новый чат
+                  + Новый чат
                </button>
             </div>
 
@@ -1317,7 +1383,11 @@ function MainPage() {
                      msOverflowStyle: 'none',
                   }}
                >
-                  {sessions.length === 0 ? (
+                  {sessionsLoading ? (
+                     [1, 2, 3].map((i) => (
+                        <div key={i} className="session-skeleton" />
+                     ))
+                  ) : sessions.length === 0 ? (
                      <p
                         style={{
                            fontSize: '12px',
@@ -1337,7 +1407,7 @@ function MainPage() {
                               marginBottom: '8px',
                               background:
                                  currentSessionId === session.id
-                                    ? '#303030'
+                                    ? 'var(--session-active)'
                                     : 'transparent',
                               borderRadius: '8px',
                               cursor: 'pointer',
@@ -1356,7 +1426,7 @@ function MainPage() {
                            }}
                            onMouseEnter={(e) => {
                               if (currentSessionId !== session.id) {
-                                 e.currentTarget.style.background = '#2a2a2a'
+                                 e.currentTarget.style.background = 'var(--session-hover)'
                                  e.currentTarget.style.borderLeft = '3px solid rgba(140, 94, 145, 0.4)'
                               }
                            }}
@@ -1367,17 +1437,31 @@ function MainPage() {
                               }
                            }}
                         >
-                           <span
+                           <div
                               style={{
                                  flex: 1,
                                  overflow: 'hidden',
-                                 textOverflow: 'ellipsis',
-                                 whiteSpace: 'nowrap',
+                                 minWidth: 0,
                               }}
                            >
-                              {session.title ||
-                                 `Диалог от ${new Date(session.createdAt).toLocaleDateString()}`}
-                           </span>
+                              <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                 {session.title ||
+                                    `Диалог от ${new Date(session.createdAt).toLocaleDateString()}`}
+                              </div>
+                              {session.resume?.targetPosition && (
+                                 <div style={{
+                                    fontSize: '10px',
+                                    color: 'var(--accent)',
+                                    opacity: 0.8,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    marginTop: '2px',
+                                 }}>
+                                    {session.resume.targetPosition}
+                                 </div>
+                              )}
+                           </div>
                            <button
                               onClick={(e) => {
                                  e.stopPropagation()
@@ -1398,7 +1482,7 @@ function MainPage() {
                                  e.currentTarget.style.opacity = '0.6'
                               }}
                            >
-                              🗑️
+                              ×
                            </button>
                         </div>
                      ))
@@ -1418,8 +1502,11 @@ function MainPage() {
                {currentSessionId && (
                   <span className="sessionBadge">сессия</span>
                )}
+               <button className="newChatBtn" onClick={createNewSession}>
+                  + Новый чат
+               </button>
                <button className="themeToggle" onClick={toggleTheme}>
-                  {theme === 'dark' ? '☀️ Светлая' : '🌙 Тёмная'}
+                  {theme === 'dark' ? 'Светлая' : 'Тёмная'}
                </button>
                <button
                   className="burgerButton"
@@ -1429,7 +1516,11 @@ function MainPage() {
                </button>
             </div>
 
-            <div className="chatMessages">
+            <div
+               className="chatMessages"
+               ref={chatMessagesRef}
+               onScroll={handleMessagesScroll}
+            >
                {messages.map((msg, index) => {
                   console.log('MSG.RESUME:', msg.resume)
                   const hasResume = msg.resume || extractJsonFromText(msg.text)
@@ -1440,70 +1531,123 @@ function MainPage() {
                         className={`message ${msg.sender}`}
                      >
                         <FormattedMessage text={msg.text} />
+                        {msg.timestamp && (
+                           <div className="message-time">{msg.timestamp}</div>
+                        )}
                         {hasResume && msg.sender === 'ai' && (
-                           <>
+                           <div className="resume-card">
+                              <div className="resume-card-header">
+                                 {(() => {
+                                    let rName: string | undefined
+                                    try {
+                                       rName =
+                                          msg.resume?.resume?.name ||
+                                          (typeof msg.resume?.content === 'string'
+                                             ? JSON.parse(msg.resume.content)?.resume?.name
+                                             : msg.resume?.content?.resume?.name)
+                                    } catch {}
+                                    return rName
+                                       ? `Резюме сформировано — ${rName}`
+                                       : 'Резюме сформировано!'
+                                 })()}
+                              </div>
+                              {(() => {
+                                 let r: any = null
+                                 try {
+                                    r = typeof msg.resume?.content === 'string'
+                                       ? JSON.parse(msg.resume.content)?.resume
+                                       : msg.resume?.resume
+                                 } catch {}
+                                 if (!r) return null
+                                 const fields = [
+                                    r.name, r.contact?.city, r.summary,
+                                    r.skills?.hard?.length, r.skills?.soft?.length,
+                                    r.education, r.experience?.length, r.targetPosition,
+                                 ]
+                                 const pct = Math.round(fields.filter(Boolean).length / fields.length * 100)
+                                 return (
+                                    <div className="resume-completeness">
+                                       <span>Заполненность резюме: {pct}%</span>
+                                       <div className="completeness-bar">
+                                          <div className="completeness-fill" style={{ width: `${pct}%` }} />
+                                       </div>
+                                    </div>
+                                 )
+                              })()}
                               <FormattedResumeInChat
                                  resumeData={msg.resume}
                                  messageText={msg.text}
                               />
-                              <div
-                                 style={{
-                                    marginTop: '10px',
-                                    padding: '8px',
-                                    background: '#212121',
-                                    borderRadius: '8px',
-                                    fontSize: '11px',
-                                    borderLeft: '2px solid #8c5e91',
-                                 }}
-                              >
-                                 📄 Резюме сформировано!
+                              <div className="resume-card-actions">
                                  <button
+                                    className="resume-card-btn resume-card-btn--ghost"
                                     onClick={() => showResumeDetails(msg)}
-                                    style={{
-                                       marginLeft: '10px',
-                                       padding: '4px 10px',
-                                       background: '#4a4a4a',
-                                       color: 'white',
-                                       border: 'none',
-                                       borderRadius: '6px',
-                                       cursor: 'pointer',
-                                       fontSize: '10px',
-                                    }}
                                  >
-                                    Посмотреть JSON
+                                    JSON
                                  </button>
                                  <button
+                                    className="resume-card-btn resume-card-btn--pdf"
                                     onClick={() =>
                                        downloadPDF(msg.resume, msg.text)
                                     }
-                                    style={{
-                                       marginLeft: '6px',
-                                       padding: '4px 10px',
-                                       background: '#6d4772',
-                                       color: 'white',
-                                       border: 'none',
-                                       borderRadius: '6px',
-                                       cursor: 'pointer',
-                                       fontSize: '10px',
+                                 >
+                                    ↓ PDF
+                                 </button>
+                                 <button
+                                    className="resume-card-btn resume-card-btn--ghost"
+                                    onClick={() => {
+                                       navigator.clipboard.writeText(msg.text)
+                                       const n = document.createElement('div')
+                                       n.textContent = '✓ Скопировано!'
+                                       n.style.cssText = `
+                                          position:fixed;bottom:20px;right:20px;
+                                          background:#8c5e91;color:white;
+                                          padding:8px 16px;border-radius:8px;
+                                          font-size:14px;z-index:1000;
+                                          animation:fadeOut 2s ease-out forwards;
+                                       `
+                                       document.body.appendChild(n)
+                                       setTimeout(() => n.remove(), 2000)
                                     }}
                                  >
-                                    📥 Скачать PDF
+                                    Копировать
                                  </button>
+                                 {msg.resume && (msg.resume.id || msg.resume.sessionId) && (
+                                    <button
+                                       className="resume-card-btn resume-card-btn--edit"
+                                       onClick={() =>
+                                          navigate(`/resume/${msg.resume.id || msg.resume.sessionId}`)
+                                       }
+                                    >
+                                       ✎ Редактировать
+                                    </button>
+                                 )}
                               </div>
-                           </>
+                           </div>
                         )}
                      </div>
                   )
                })}
-               {messages.length === 1 && messages[0].sender === 'ai' && !loading && (
+               {messages.length === 1 && messages[0].sender === 'ai' && !currentSessionId && !loading && (
                   <div className="chatEmptyState">
-                     <div className="emptyIcon" aria-hidden="true">✨</div>
+                     <div className="emptyIcon" aria-hidden="true">◆</div>
                      <p>Начни диалог с ИИ-помощником</p>
                      <span>Расскажи о своём опыте и навыках, чтобы получить резюме и карьерный анализ</span>
                   </div>
                )}
-               {loading && <div className="message ai">✍️ Печатает...</div>}
+               {loading && (
+                  <div className="typing-indicator">
+                     <span></span>
+                     <span></span>
+                     <span></span>
+                  </div>
+               )}
                <div ref={messagesEndRef} />
+               {showScrollBtn && (
+                  <button className="scroll-to-bottom" onClick={scrollToBottom}>
+                     ↓ Вниз
+                  </button>
+               )}
             </div>
 
             <div
@@ -1514,6 +1658,7 @@ function MainPage() {
                   gap: '12px',
                   marginBottom: '2rem',
                   padding: '0 20px',
+                  position: 'relative',
                }}
             >
                <textarea
@@ -1526,15 +1671,13 @@ function MainPage() {
                   onKeyDown={handleKeyDown}
                   placeholder="Напишите сообщение..."
                   disabled={loading}
+                  maxLength={1000}
+                  className="chatTextarea"
                   style={{
                      flex: 1,
                      maxWidth: '70vw',
-                     backgroundColor: '#303030',
                      borderRadius: '20px',
                      padding: '10px 16px',
-                     color: 'white',
-                     border: 'none',
-                     outline: 'none',
                      fontSize: '14px',
                      fontFamily: 'inherit',
                      resize: 'none',
@@ -1549,6 +1692,22 @@ function MainPage() {
                      margin: '10px 0 -20px 0',
                   }}
                />
+               {input.length > 0 && (
+                  <span style={{
+                     position: 'absolute',
+                     bottom: '-18px',
+                     right: '80px',
+                     fontSize: '11px',
+                     color: 'var(--text-secondary)',
+                     opacity: 0.7,
+                     pointerEvents: 'none',
+                  }}>
+                     {input.length} / 1000
+                  </span>
+               )}
+               <span className="keyboard-hint">
+                  Enter — отправить &nbsp;·&nbsp; Shift+Enter — новая строка
+               </span>
                <button
                   onClick={handleSend}
                   disabled={loading || !input.trim()}
@@ -1599,7 +1758,7 @@ function MainPage() {
                   onClick={(e) => e.stopPropagation()}
                >
                   <div className="modal-header">
-                     <h3>📄 JSON резюме</h3>
+                     <h3>JSON резюме</h3>
                      <div
                         style={{
                            display: 'flex',
@@ -1624,7 +1783,7 @@ function MainPage() {
                               fontSize: '12px',
                            }}
                         >
-                           📥 Скачать PDF
+                           ↓ Скачать PDF
                         </button>
                         <button
                            className="modal-close"
