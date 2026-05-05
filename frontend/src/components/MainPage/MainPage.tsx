@@ -455,6 +455,9 @@ const JsonViewer = ({ messageText }: { messageText: string }) => {
 
 function MainPage() {
    const [sidebarOpen, setSidebarOpen] = useState(false)
+   const [theme, setTheme] = useState<'dark' | 'light'>(
+      () => (localStorage.getItem('theme') as 'dark' | 'light') || 'dark',
+   )
    const [messages, setMessages] = useState<Message[]>([
       {
          text: 'Привет! Я помогу тебе составить резюме. Расскажи о себе 👇',
@@ -1243,6 +1246,14 @@ function MainPage() {
    }
 
    useEffect(() => {
+      document.documentElement.setAttribute('data-theme', theme)
+      localStorage.setItem('theme', theme)
+   }, [theme])
+
+   const toggleTheme = () =>
+      setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
+
+   useEffect(() => {
       loadSessions()
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [])
@@ -1257,39 +1268,38 @@ function MainPage() {
             >
                ✕
             </button>
-            <h2>
-               Здравствуйте, {account?.name || account?.email || 'пользователь'}
-               !
-            </h2>
+            <div className="sidebarGreeting">
+               <div className="sidebarAvatar">
+                  {(account?.name || account?.email || 'U')
+                     .trim()
+                     .charAt(0)
+                     .toUpperCase()}
+               </div>
+               <div className="sidebarGreetingText">
+                  <div className="sidebarGreetingName">
+                     {account?.name || account?.email || 'Пользователь'}
+                  </div>
+                  <div className="sidebarGreetingSubtitle">
+                     Твой карьерный помощник
+                  </div>
+               </div>
+            </div>
             <div className="catalogButtons">
                <button
-                  className="buttonSuport"
+                  className={`sidebarBtn sidebarBtnGhost${showSessions ? ' active' : ''}`}
                   onClick={() => {
                      if (!showSessions) {
                         loadSessions(true)
                      }
                      setShowSessions(!showSessions)
                   }}
-                  style={{
-                     cursor: 'pointer',
-                     padding: '8px',
-                     borderRadius: '8px',
-                     background: showSessions
-                        ? 'rgba(140,94,145,0.3)'
-                        : 'transparent',
-                  }}
                >
                   📋 {showSessions ? 'Скрыть историю' : 'История чатов'}
                </button>
 
                <button
-                  className="buttonSuport"
+                  className="sidebarBtn sidebarBtnPrimary"
                   onClick={createNewSession}
-                  style={{
-                     cursor: 'pointer',
-                     padding: '8px',
-                     borderRadius: '8px',
-                  }}
                >
                   ✨ Новый чат
                </button>
@@ -1336,6 +1346,9 @@ function MainPage() {
                               alignItems: 'center',
                               fontSize: '12px',
                               transition: 'all 0.2s',
+                              borderLeft: currentSessionId === session.id
+                                 ? '3px solid var(--accent)'
+                                 : '3px solid transparent',
                            }}
                            onClick={() => {
                               loadSession(session.id)
@@ -1344,12 +1357,13 @@ function MainPage() {
                            onMouseEnter={(e) => {
                               if (currentSessionId !== session.id) {
                                  e.currentTarget.style.background = '#2a2a2a'
+                                 e.currentTarget.style.borderLeft = '3px solid rgba(140, 94, 145, 0.4)'
                               }
                            }}
                            onMouseLeave={(e) => {
                               if (currentSessionId !== session.id) {
-                                 e.currentTarget.style.background =
-                                    'transparent'
+                                 e.currentTarget.style.background = 'transparent'
+                                 e.currentTarget.style.borderLeft = '3px solid transparent'
                               }
                            }}
                         >
@@ -1402,16 +1416,11 @@ function MainPage() {
             <div className="chatHeader">
                Career Intelligence Platform
                {currentSessionId && (
-                  <span
-                     style={{
-                        fontSize: '11px',
-                        marginLeft: '10px',
-                        color: '#848484',
-                     }}
-                  >
-                     💬 сессия
-                  </span>
+                  <span className="sessionBadge">сессия</span>
                )}
+               <button className="themeToggle" onClick={toggleTheme}>
+                  {theme === 'dark' ? '☀️ Светлая' : '🌙 Тёмная'}
+               </button>
                <button
                   className="burgerButton"
                   onClick={() => setSidebarOpen(true)}
@@ -1486,6 +1495,13 @@ function MainPage() {
                      </div>
                   )
                })}
+               {messages.length === 1 && messages[0].sender === 'ai' && !loading && (
+                  <div className="chatEmptyState">
+                     <div className="emptyIcon" aria-hidden="true">✨</div>
+                     <p>Начни диалог с ИИ-помощником</p>
+                     <span>Расскажи о своём опыте и навыках, чтобы получить резюме и карьерный анализ</span>
+                  </div>
+               )}
                {loading && <div className="message ai">✍️ Печатает...</div>}
                <div ref={messagesEndRef} />
             </div>

@@ -58,13 +58,17 @@ function RegisterPage() {
     <div className="loginPage">
       <div className="logniPageWrapper">
         <div className="panel">
+          <div className="panel-brand">
+            <div className="panel-brand-name">Car<span>IP</span></div>
+          </div>
           <h3>Регистрация</h3>
-          <p>Придумайте логин и пароль</p>
+          <p>Создайте аккаунт, чтобы начать</p>
 
           <div className="inputGroup">
+            <label>Имя пользователя</label>
             <input
               type="text"
-              placeholder="Имя"
+              placeholder="Иван Иванов"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -72,9 +76,10 @@ function RegisterPage() {
           </div>
 
           <div className="inputGroup">
+            <label>Email</label>
             <input
               type="email"
-              placeholder="Email"
+              placeholder="you@example.com"
               required
               value={login}
               onChange={(e) => setLogin(e.target.value)}
@@ -82,28 +87,33 @@ function RegisterPage() {
           </div>
 
           <div className="inputGroup">
+            <label>Пароль</label>
             <input
               type="password"
-              placeholder="Пароль"
+              placeholder="••••••••"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleRegister()}
             />
           </div>
 
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && (
+            <p style={{ color: 'var(--error)', fontSize: '0.85rem', margin: 0 }}>
+              {error}
+            </p>
+          )}
+
           <div className="buttonWrapper">
             <button onClick={handleRegister} className="buttonLogIn">
               Зарегистрироваться
             </button>
           </div>
-        </div>
-        <div className="loginTexts">
-          <p>Добро пожаловать!</p>
-          <p>
-            Покорояйте вершины вашей карьеры с<br />
-            Career Intelligence Platform
-          </p>
+
+          <div className="authLink">
+            Уже есть аккаунт?{' '}
+            <span onClick={() => navigate('/login')}>Войти</span>
+          </div>
         </div>
       </div>
     </div>

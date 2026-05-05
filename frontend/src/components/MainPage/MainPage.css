@@ -1,21 +1,23 @@
 .layout {
   display: flex;
   height: 100vh;
-  background: #212121;
-  color: white;
+  background: var(--bg-primary, #111111);
+  color: var(--text-primary, #f1f1f1);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* SIDEBAR */
 .sidebar {
   width: 250px;
-  background: #181818;
+  background: var(--sidebar-bg, #111111);
   padding: 20px;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid var(--border, #2a2a2a);
+  transition: background-color 0.3s ease;
 }
 
 .sidebar h2 {
@@ -25,17 +27,18 @@
 /* Logout */
 .logoutBtn {
   padding: 12px;
-  border: none;
+  border: 1px solid var(--border, #2a2a2a);
   border-radius: 10px;
 
-  background: #4a4a4a;
-  color: white;
+  background: var(--bg-card, #1e1e1e);
+  color: var(--text-primary, #f1f1f1);
   cursor: pointer;
   transition: 0.2s;
 }
 
 .logoutBtn:hover {
-  background: #424242;
+  border-color: var(--accent, #8c5e91);
+  background: var(--accent-dim, rgba(140, 94, 145, 0.15));
 }
 
 /* CHAT SECTION */
@@ -47,9 +50,51 @@
 
 /* Header */
 .chatHeader {
-  padding: 15px;
-  border-bottom: 1px solid #2c2c2c;
-  font-weight: bold;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: 600;
+  background: var(--sidebar-bg, #111111);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+[data-theme='light'] .chatHeader {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.sessionBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #6b3fa0;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.themeToggle {
+  margin-left: auto;
+  background: var(--bg-card, #1e1e1e);
+  border: 1px solid var(--border, #2a2a2a);
+  color: var(--text-secondary, #888);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.themeToggle:hover {
+  border-color: var(--accent, #8c5e91);
+  color: var(--text-primary, #f1f1f1);
 }
 
 /* Messages */
@@ -57,88 +102,65 @@
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(107, 63, 160, 0.06) 0%, transparent 65%),
+    var(--bg-primary, #0f0f0f);
 
   display: flex;
   flex-direction: column;
   gap: 12px;
+  transition: background-color 0.3s ease;
 }
 
-/* Messages */
+[data-theme='light'] .chatMessages {
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(107, 63, 160, 0.05) 0%, transparent 65%),
+    var(--bg-primary, #f8f9fa);
+}
+
+/* Message bubble */
 .message {
   max-width: 60%;
   padding: 12px 16px;
   border-radius: 12px;
   font-size: 14px;
+  color: var(--text-primary, #f1f1f1);
 }
 
 /* AI */
 .message.ai {
-  background: #303030;
+  background: var(--msg-ai, #1e1e1e);
   align-self: flex-start;
+  border: 1px solid var(--border, #2a2a2a);
+  border-left: 3px solid rgba(140, 94, 145, 0.3);
 }
 
 /* USER */
 .message.user {
-  background: #848484;
+  background: var(--msg-user, #2d1f3d);
   align-self: flex-end;
 }
 
-/* Input */
-.chatInput {
-  display: flex;
-  border-top: 1px solid #303030;
-}
-
-.chatInput input:focus {
-  border: 1px solid #000000;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
-}
-
+/* Input container */
 .chatInput {
   position: relative;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.inputMain {
-  width: 70vw;
-  height: 2rem;
-  background-color: #303030;
-  border-radius: 20px;
-  padding: 5px 10px;
-  color: white;
-}
-
-.catalogButtons {
   display: flex;
-  flex-direction: column;
-  justify-content: end;
-  gap: 10px;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 2rem;
+  padding: 0 20px;
+  background: var(--bg-primary, #0f0f0f);
+  border-top: 1px solid var(--border, #2a2a2a);
+  transition: background-color 0.3s ease;
 }
 
-.buttonSuport {
-  background: transparent;
-  color: white;
-  border: none;
-}
-
-.buttonSend {
-  position: absolute;
-  right: 8%;
-  top: 20%;
-  border-radius: 50%;
-}
-
-/* Добавьте эти стили к существующим */
-
-/* Стили для textarea вместо input */
 .inputMain {
   width: 70vw;
-  background-color: #303030;
+  background-color: var(--bg-card, #1e1e1e);
   border-radius: 20px;
   padding: 10px 45px 10px 16px;
-  color: white;
-  border: none;
+  color: var(--text-primary, #f1f1f1);
+  border: 1px solid var(--border, #2a2a2a);
   outline: none;
   font-size: 14px;
   font-family: inherit;
@@ -146,11 +168,12 @@
   min-height: 40px;
   max-height: 100px;
   line-height: 1.4;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
 }
 
 .inputMain:focus {
-  border: 1px solid #8c5e91;
-  box-shadow: 0 0 0 2px rgba(140, 94, 145, 0.3);
+  border: 1px solid var(--accent, #8c5e91);
+  box-shadow: 0 0 0 4px rgba(140, 94, 145, 0.28);
 }
 
 .inputMain:disabled {
@@ -158,7 +181,73 @@
   cursor: not-allowed;
 }
 
-/* Стили для кнопки отправки */
+.catalogButtons {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  gap: 8px;
+}
+
+.buttonSuport {
+  background: transparent;
+  color: var(--text-secondary, #888);
+  border: none;
+}
+
+/* Sidebar action buttons */
+.sidebarBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease,
+    box-shadow 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.sidebarBtn:active {
+  transform: scale(0.98);
+}
+
+.sidebarBtnGhost {
+  background: transparent;
+  color: var(--text-secondary, #888);
+  border: 1px solid var(--border, #2a2a2a);
+}
+
+.sidebarBtnGhost:hover {
+  background: rgba(140, 94, 145, 0.12);
+  border-color: rgba(140, 94, 145, 0.45);
+  color: var(--text-primary, #f1f1f1);
+}
+
+.sidebarBtnGhost.active {
+  background: rgba(140, 94, 145, 0.18);
+  border-color: rgba(140, 94, 145, 0.5);
+  color: var(--text-primary, #f1f1f1);
+}
+
+.sidebarBtnPrimary {
+  background: linear-gradient(135deg, #8c5e91 0%, #6b3fa0 100%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 6px rgba(107, 63, 160, 0.25);
+}
+
+.sidebarBtnPrimary:hover {
+  background: linear-gradient(135deg, #9a6aa0 0%, #7849b3 100%);
+  box-shadow: 0 4px 16px rgba(140, 94, 145, 0.45),
+    0 0 0 1px rgba(140, 94, 145, 0.35);
+}
+
+/* Send button */
 .buttonSend {
   position: absolute;
   right: calc(15% + 8px);
@@ -167,19 +256,20 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #4a4a4a;
-  border: none;
+  background: var(--bg-card, #1e1e1e);
+  border: 1px solid var(--border, #2a2a2a);
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  color: white;
+  color: var(--text-primary, #f1f1f1);
 }
 
 .buttonSend:hover:not(:disabled) {
-  background: #6d4772;
+  background: var(--accent, #8c5e91);
+  border-color: var(--accent, #8c5e91);
   transform: translateY(-50%) scale(1.05);
 }
 
@@ -188,15 +278,7 @@
   cursor: not-allowed;
 }
 
-/* Позиционирование контейнера ввода */
-.chatInput {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-/* Скрываем скроллбар для WebKit браузеров (Chrome, Safari, Edge) */
+/* Hide scrollbars */
 .chatMessages::-webkit-scrollbar,
 .sidebar div::-webkit-scrollbar,
 textarea::-webkit-scrollbar {
@@ -205,156 +287,14 @@ textarea::-webkit-scrollbar {
   background: transparent;
 }
 
-/* Скрываем скроллбар для Firefox */
 .chatMessages,
 .sidebar div,
 textarea {
   scrollbar-width: none;
-}
-
-/* Скрываем скроллбар для IE/Edge */
-.chatMessages,
-.sidebar div,
-textarea {
   -ms-overflow-style: none;
 }
 
-/* Обновляем стили chatInput */
-.chatInput {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 2rem;
-  padding: 0 20px;
-}
-
-/* Существующие стили остаются, добавляем новые */
-
-/* Стили для блоков кода */
-.code-block {
-  margin: 12px 0;
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: #1e1e1e;
-  border: 1px solid #333;
-}
-
-.code-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background-color: #2d2d2d;
-  border-bottom: 1px solid #333;
-  font-size: 12px;
-}
-
-.code-language {
-  color: #8c5e91;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.copy-button {
-  background: #4a4a4a;
-  border: none;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 11px;
-  transition: all 0.2s;
-}
-
-.copy-button:hover {
-  background: #6d4772;
-  transform: scale(1.05);
-}
-
-.code-content {
-  margin: 0;
-  padding: 12px;
-  overflow-x: auto;
-  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-  font-size: 12px;
-  line-height: 1.5;
-  background-color: #1e1e1e;
-  color: #d4d4d4;
-}
-
-.code-line {
-  display: flex;
-  gap: 12px;
-  white-space: pre;
-}
-
-.line-number {
-  color: #858585;
-  user-select: none;
-  text-align: right;
-  min-width: 35px;
-  font-size: 11px;
-}
-
-.line-content {
-  flex: 1;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-/* Подсветка для разных языков (простая версия) */
-.code-content code {
-  display: block;
-}
-
-/* Для inline кода */
-.message pre:not(.code-content) {
-  background: #2d2d2d;
-  padding: 8px;
-  border-radius: 4px;
-  overflow-x: auto;
-  font-family: monospace;
-  font-size: 12px;
-  margin: 8px 0;
-}
-
-.message code {
-  background: #2d2d2d;
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-family: monospace;
-  font-size: 12px;
-  color: #8c5e91;
-}
-
-/* Стили для inline кода внутри текста */
-.message :not(pre) > code {
-  background: #2d2d2d;
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-size: 0.9em;
-  font-family: monospace;
-}
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-  .code-content {
-    font-size: 11px;
-  }
-
-  .line-number {
-    min-width: 30px;
-  }
-
-  .code-header {
-    font-size: 10px;
-  }
-}
-
-/* Существующие стили остаются, добавляем новые */
-
-/* Стили для блоков кода */
+/* Code blocks */
 .code-block {
   margin: 12px 0;
   border-radius: 8px;
@@ -415,7 +355,7 @@ textarea {
   margin: 0;
   padding: 12px;
   overflow-x: auto;
-  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+  font-family: 'JetBrains Mono', 'Courier New', 'Monaco', 'Menlo', monospace;
   font-size: 12px;
   line-height: 1.5;
   background-color: #1e1e1e;
@@ -446,14 +386,12 @@ textarea {
   font-family: monospace;
 }
 
-/* Стили для обычного текста */
 .plain-text {
   white-space: pre-wrap;
   word-break: break-word;
   line-height: 1.6;
 }
 
-/* Для inline кода */
 .message pre:not(.code-content) {
   background: #2d2d2d;
   padding: 8px;
@@ -473,7 +411,6 @@ textarea {
   color: #efa2f8;
 }
 
-/* Стили для inline кода внутри текста */
 .message :not(pre) > code {
   background: #2d2d2d;
   padding: 2px 4px;
@@ -484,31 +421,14 @@ textarea {
   white-space: nowrap;
 }
 
-/* Анимация для уведомления */
 @keyframes fadeOut {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  70% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-20px);
-    display: none;
-  }
+  0% { opacity: 1; transform: translateY(0); }
+  70% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-20px); }
 }
 
-/* Стили для разных типов кода (можно добавить подсветку) */
 .code-content .code-line:hover {
   background-color: rgba(140, 94, 145, 0.1);
-}
-
-/* Для длинных строк - горизонтальный скролл */
-.code-content {
-  overflow-x: auto;
 }
 
 .code-content::-webkit-scrollbar {
@@ -525,33 +445,7 @@ textarea {
   background: #6d4772;
 }
 
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-  .code-content {
-    font-size: 10px;
-  }
-
-  .sidebar {
-    display: none;
-  }
-
-  .line-number {
-    min-width: 30px;
-    font-size: 9px;
-  }
-
-  .code-header {
-    font-size: 10px;
-    padding: 6px 10px;
-  }
-
-  .copy-button {
-    padding: 3px 6px;
-    font-size: 10px;
-  }
-}
-
-/* Поддержка темной темы для выделения текста */
+/* Selection */
 ::selection {
   background: rgba(140, 94, 145, 0.3);
   color: white;
@@ -561,7 +455,7 @@ textarea {
   background: rgba(140, 94, 145, 0.5);
 }
 
-/* Модальное окно для резюме */
+/* Resume modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -636,7 +530,7 @@ textarea {
   background: #0d0d0d;
   padding: 16px;
   border-radius: 8px;
-  font-family: 'Courier New', monospace;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
   font-size: 12px;
   line-height: 1.5;
   color: #d4d4d4;
@@ -647,778 +541,143 @@ textarea {
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideUp {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-/* =========================
-   📱 BURGER BUTTON
-========================= */
-.burgerButton {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  z-index: 1001;
-
-  background: #4a4a4a;
-  color: white;
-  border: none;
-  border-radius: 8px;
-
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
-
-  display: none;
-  cursor: pointer;
-}
-
-/* =========================
-   ❌ CLOSE BUTTON
-========================= */
-.closeSidebar {
-  display: none;
-  align-self: flex-end;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-/* =========================
-   📱 MOBILE LOGIC
-========================= */
-@media (max-width: 768px) {
-  .burgerButton {
-    display: block;
-  }
-
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -100%; /* скрыт */
-    height: 100%;
-    z-index: 1000;
-    transition: 0.3s ease;
-  }
-
-  .open {
-    display: block;
-    left: 0; /* показываем */
-  }
-
-  .closeSidebar {
-    display: block;
-    margin-bottom: 10px;
-  }
-}
-
-.sidebarOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-}
-
-.layout {
+/* ============================
+   SIDEBAR GREETING
+============================ */
+.sidebarGreeting {
   display: flex;
-  height: 100vh;
-  background: #212121;
-  color: white;
-}
-
-/* SIDEBAR */
-.sidebar {
-  width: 250px;
-  background: #181818;
-  padding: 20px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  border-right: 1px solid #2c2c2c;
-}
-
-.sidebar h2 {
-  margin: 0;
-}
-
-/* Logout */
-.logoutBtn {
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-
-  background: #4a4a4a;
-  color: white;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.logoutBtn:hover {
-  background: #424242;
-}
-
-/* CHAT SECTION */
-.chatSection {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Header */
-.chatHeader {
-  padding: 15px;
-  border-bottom: 1px solid #2c2c2c;
-  font-weight: bold;
-}
-
-/* Messages */
-.chatMessages {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* Messages */
-.message {
-  max-width: 60%;
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 14px;
-}
-
-/* AI */
-.message.ai {
-  background: #303030;
-  align-self: flex-start;
-}
-
-/* USER */
-.message.user {
-  background: #848484;
-  align-self: flex-end;
-}
-
-/* Input */
-.chatInput {
-  display: flex;
-  border-top: 1px solid #303030;
-}
-
-.chatInput input:focus {
-  border: 1px solid #000000;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
-}
-
-.chatInput {
-  position: relative;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.inputMain {
-  width: 70vw;
-  height: 2rem;
-  background-color: #303030;
-  border-radius: 20px;
-  padding: 5px 10px;
-  color: white;
-}
-
-.catalogButtons {
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
+  align-items: center;
   gap: 10px;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.buttonSuport {
-  background: transparent;
-  color: white;
-  border: none;
+[data-theme='light'] .sidebarGreeting {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-.buttonSend {
-  position: absolute;
-  right: 8%;
-  top: 20%;
+.sidebarAvatar {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #8c5e91 0%, #6b3fa0 100%);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(107, 63, 160, 0.3);
 }
 
-/* Добавьте эти стили к существующим */
+.sidebarGreetingText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
 
-/* Стили для textarea вместо input */
-.inputMain {
-  width: 70vw;
-  background-color: #303030;
-  border-radius: 20px;
-  padding: 10px 45px 10px 16px;
-  color: white;
-  border: none;
-  outline: none;
+.sidebarGreetingName {
   font-size: 14px;
-  font-family: inherit;
-  resize: none;
-  min-height: 40px;
-  max-height: 100px;
-  line-height: 1.4;
-}
-
-.inputMain:focus {
-  border: 1px solid #8c5e91;
-  box-shadow: 0 0 0 2px rgba(140, 94, 145, 0.3);
-}
-
-.inputMain:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-/* Стили для кнопки отправки */
-.buttonSend {
-  position: absolute;
-  right: calc(15% + 8px);
-  top: 50%;
-  transform: translateY(-50%);
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #4a4a4a;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  color: white;
-}
-
-.buttonSend:hover:not(:disabled) {
-  background: #6d4772;
-  transform: translateY(-50%) scale(1.05);
-}
-
-.buttonSend:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Позиционирование контейнера ввода */
-.chatInput {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-/* Скрываем скроллбар для WebKit браузеров (Chrome, Safari, Edge) */
-.chatMessages::-webkit-scrollbar,
-.sidebar div::-webkit-scrollbar,
-textarea::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  background: transparent;
-}
-
-/* Скрываем скроллбар для Firefox */
-.chatMessages,
-.sidebar div,
-textarea {
-  scrollbar-width: none;
-}
-
-/* Скрываем скроллбар для IE/Edge */
-.chatMessages,
-.sidebar div,
-textarea {
-  -ms-overflow-style: none;
-}
-
-/* Обновляем стили chatInput */
-.chatInput {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 2rem;
-  padding: 0 20px;
-}
-
-/* Существующие стили остаются, добавляем новые */
-
-/* Стили для блоков кода */
-.code-block {
-  margin: 12px 0;
-  border-radius: 8px;
+  font-weight: 600;
+  color: var(--text-primary, #f1f1f1);
+  line-height: 1.3;
   overflow: hidden;
-  background-color: #1e1e1e;
-  border: 1px solid #333;
-}
-
-.code-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background-color: #2d2d2d;
-  border-bottom: 1px solid #333;
-  font-size: 12px;
-}
-
-.code-language {
-  color: #8c5e91;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.copy-button {
-  background: #4a4a4a;
-  border: none;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 11px;
-  transition: all 0.2s;
-}
-
-.copy-button:hover {
-  background: #6d4772;
-  transform: scale(1.05);
-}
-
-.code-content {
-  margin: 0;
-  padding: 12px;
-  overflow-x: auto;
-  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-  font-size: 12px;
-  line-height: 1.5;
-  background-color: #1e1e1e;
-  color: #d4d4d4;
-}
-
-.code-line {
-  display: flex;
-  gap: 12px;
-  white-space: pre;
-}
-
-.line-number {
-  color: #858585;
-  user-select: none;
-  text-align: right;
-  min-width: 35px;
-  font-size: 11px;
-}
-
-.line-content {
-  flex: 1;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-/* Подсветка для разных языков (простая версия) */
-.code-content code {
-  display: block;
-}
-
-/* Для inline кода */
-.message pre:not(.code-content) {
-  background: #2d2d2d;
-  padding: 8px;
-  border-radius: 4px;
-  overflow-x: auto;
-  font-family: monospace;
-  font-size: 12px;
-  margin: 8px 0;
-}
-
-.message code {
-  background: #2d2d2d;
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-family: monospace;
-  font-size: 12px;
-  color: #8c5e91;
-}
-
-/* Стили для inline кода внутри текста */
-.message :not(pre) > code {
-  background: #2d2d2d;
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-size: 0.9em;
-  font-family: monospace;
-}
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-  .code-content {
-    font-size: 11px;
-  }
-
-  .line-number {
-    min-width: 30px;
-  }
-
-  .code-header {
-    font-size: 10px;
-  }
-}
-
-/* Существующие стили остаются, добавляем новые */
-
-/* Стили для блоков кода */
-.code-block {
-  margin: 12px 0;
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: #1e1e1e;
-  border: 1px solid #333;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.code-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background-color: #2d2d2d;
-  border-bottom: 1px solid #333;
-  font-size: 12px;
-}
-
-.code-language {
-  color: #8c5e91;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-family: monospace;
-}
-
-.code-lines-count {
-  color: #858585;
-  font-size: 10px;
-  margin-left: 8px;
-  text-transform: none;
-  font-weight: normal;
-}
-
-.copy-button {
-  background: #4a4a4a;
-  border: none;
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 11px;
-  transition: all 0.2s;
-  font-family: inherit;
-}
-
-.copy-button:hover {
-  background: #6d4772;
-  transform: scale(1.05);
-}
-
-.copy-button:active {
-  transform: scale(0.95);
-}
-
-.code-content {
-  margin: 0;
-  padding: 12px;
-  overflow-x: auto;
-  font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
-  font-size: 12px;
-  line-height: 1.5;
-  background-color: #1e1e1e;
-  color: #d4d4d4;
-}
-
-.code-line {
-  display: flex;
-  gap: 12px;
-  white-space: pre;
-  min-height: 20px;
-}
-
-.line-number {
-  color: #858585;
-  user-select: none;
-  text-align: right;
-  min-width: 35px;
-  font-size: 11px;
-  font-family: monospace;
-  opacity: 0.7;
-}
-
-.line-content {
-  flex: 1;
-  white-space: pre-wrap;
-  word-break: break-all;
-  font-family: monospace;
-}
-
-/* Стили для обычного текста */
-.plain-text {
-  white-space: pre-wrap;
-  word-break: break-word;
-  line-height: 1.6;
-}
-
-/* Для inline кода */
-.message pre:not(.code-content) {
-  background: #2d2d2d;
-  padding: 8px;
-  border-radius: 4px;
-  overflow-x: auto;
-  font-family: monospace;
-  font-size: 12px;
-  margin: 8px 0;
-}
-
-.message code {
-  background: #2d2d2d;
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-family: monospace;
-  font-size: 12px;
-  color: #efa2f8;
-}
-
-/* Стили для inline кода внутри текста */
-.message :not(pre) > code {
-  background: #2d2d2d;
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-size: 0.9em;
-  font-family: monospace;
-  color: #dc37ef;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* Анимация для уведомления */
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  70% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-20px);
-    display: none;
-  }
+.sidebarGreetingSubtitle {
+  font-size: 12px;
+  color: #a78cc2;
+  margin-top: 2px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
-/* Стили для разных типов кода (можно добавить подсветку) */
-.code-content .code-line:hover {
-  background-color: rgba(140, 94, 145, 0.1);
-}
-
-/* Для длинных строк - горизонтальный скролл */
-.code-content {
-  overflow-x: auto;
-}
-
-.code-content::-webkit-scrollbar {
-  height: 8px;
-  background: #2d2d2d;
-}
-
-.code-content::-webkit-scrollbar-thumb {
-  background: #8c5e91;
-  border-radius: 4px;
-}
-
-.code-content::-webkit-scrollbar-thumb:hover {
-  background: #6d4772;
-}
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-  .code-content {
-    font-size: 10px;
-  }
-
-  .sidebar {
-    display: none;
-  }
-
-  .line-number {
-    min-width: 30px;
-    font-size: 9px;
-  }
-
-  .code-header {
-    font-size: 10px;
-    padding: 6px 10px;
-  }
-
-  .copy-button {
-    padding: 3px 6px;
-    font-size: 10px;
-  }
-}
-
-/* Поддержка темной темы для выделения текста */
-::selection {
-  background: rgba(140, 94, 145, 0.3);
-  color: white;
-}
-
-.code-content ::selection {
-  background: rgba(140, 94, 145, 0.5);
-}
-
-/* Модальное окно для резюме */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  animation: fadeIn 0.2s ease-out;
-}
-
-.modal-content {
-  background: #1e1e1e;
-  border-radius: 12px;
-  max-width: 80vw;
-  max-height: 80vh;
-  width: 800px;
+/* ============================
+   CHAT EMPTY STATE
+============================ */
+.chatEmptyState {
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  border: 1px solid #333;
-  animation: slideUp 0.3s ease-out;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  border-bottom: 1px solid #333;
-  background: #2d2d2d;
-  border-radius: 12px 12px 0 0;
-}
-
-.modal-header h3 {
-  margin: 0;
-  color: #8c5e91;
-  font-size: 18px;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  color: #858585;
-  font-size: 24px;
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
-  transition: all 0.2s;
-}
-
-.modal-close:hover {
-  background: #4a4a4a;
-  color: white;
-}
-
-.modal-body {
-  padding: 20px;
-  overflow-y: auto;
   flex: 1;
+  padding: 3rem 2rem;
+  color: var(--text-secondary, #888);
+  text-align: center;
+  gap: 0.75rem;
+  pointer-events: none;
+  user-select: none;
 }
 
-.resume-json {
-  background: #0d0d0d;
-  padding: 16px;
-  border-radius: 8px;
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-  line-height: 1.5;
-  color: #d4d4d4;
-  overflow-x: auto;
+.chatEmptyState .emptyIcon {
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 0 12px rgba(140, 94, 145, 0.5));
+  animation: emptyIconPulse 3s ease-in-out infinite;
+}
+
+.chatEmptyState p {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary, #f1f1f1);
   margin: 0;
-  white-space: pre-wrap;
-  word-break: break-word;
+  opacity: 0.85;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.chatEmptyState span {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #888);
+  opacity: 0.7;
+  max-width: 420px;
+  line-height: 1.5;
 }
 
-@keyframes slideUp {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
+@keyframes emptyIconPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 12px rgba(140, 94, 145, 0.5));
   }
-  to {
-    transform: translateY(0);
-    opacity: 1;
+  50% {
+    filter: drop-shadow(0 0 18px rgba(140, 94, 145, 0.7));
   }
 }
 
-/* =========================
-   📱 BURGER BUTTON
-========================= */
+/* ============================
+   LIGHT THEME ADDITIONS
+============================ */
+[data-theme='light'] .sidebar {
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme='light'] .message.ai {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+/* Burger button */
 .burgerButton {
   position: fixed;
   top: 15px;
   right: 15px;
   z-index: 1001;
 
-  background: #4a4a4a;
-  color: white;
-  border: none;
+  background: var(--bg-card, #1e1e1e);
+  color: var(--text-primary, #f1f1f1);
+  border: 1px solid var(--border, #2a2a2a);
   border-radius: 8px;
 
   width: 40px;
@@ -1429,45 +688,15 @@ textarea {
   cursor: pointer;
 }
 
-/* =========================
-   ❌ CLOSE BUTTON
-========================= */
+/* Close button */
 .closeSidebar {
   display: none;
   align-self: flex-end;
   background: none;
   border: none;
-  color: white;
+  color: var(--text-primary, #f1f1f1);
   font-size: 20px;
   cursor: pointer;
-}
-
-/* =========================
-   📱 MOBILE LOGIC
-========================= */
-@media (max-width: 768px) {
-  .burgerButton {
-    display: block;
-  }
-
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -100%; /* скрыт */
-    height: 100%;
-    z-index: 1000;
-    transition: 0.3s ease;
-  }
-
-  .open {
-    display: block;
-    left: 0; /* показываем */
-  }
-
-  .closeSidebar {
-    display: block;
-    margin-bottom: 10px;
-  }
 }
 
 .sidebarOverlay {
@@ -1480,11 +709,31 @@ textarea {
   z-index: 999;
 }
 
-/* =========================
-   📱 Адаптивные стили для мобильных
-========================= */
+/* Mobile */
 @media (max-width: 768px) {
-  /* Sidebar */
+  .burgerButton {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100%;
+    z-index: 1000;
+    transition: 0.3s ease;
+  }
+
+  .open {
+    display: block;
+    left: 0;
+  }
+
+  .closeSidebar {
+    display: block;
+    margin-bottom: 10px;
+  }
+
   .sidebar {
     width: 80%;
     padding: 25px;
@@ -1495,13 +744,11 @@ textarea {
     font-size: 1.4rem;
   }
 
-  /* Кнопка выхода */
   .logoutBtn {
     padding: 14px;
     font-size: 1.1rem;
   }
 
-  /* Chat Section */
   .chatHeader {
     font-size: 1.2rem;
     padding: 18px;
@@ -1518,7 +765,6 @@ textarea {
     max-width: 80%;
   }
 
-  /* Input area */
   .chatInput {
     padding: 0 15px;
     margin-bottom: 2.5rem;
@@ -1538,7 +784,6 @@ textarea {
     right: calc(15% + 10px);
   }
 
-  /* Code blocks */
   .code-content {
     font-size: 11px;
   }
@@ -1558,7 +803,6 @@ textarea {
     padding: 3px 6px;
   }
 
-  /* Modal */
   .modal-header h3 {
     font-size: 16px;
   }
@@ -1567,7 +811,6 @@ textarea {
     font-size: 11px;
   }
 
-  /* Burger button */
   .burgerButton {
     width: 45px;
     height: 45px;
@@ -1579,9 +822,6 @@ textarea {
   }
 }
 
-/* =========================
-   📱 Адаптив для маленьких экранов (<480px)
-========================= */
 @media (max-width: 480px) {
   .sidebar {
     width: 90%;

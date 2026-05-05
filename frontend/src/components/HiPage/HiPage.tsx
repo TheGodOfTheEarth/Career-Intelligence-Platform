@@ -1,191 +1,219 @@
-import React, { useLayoutEffect } from 'react'
+import React from 'react'
 import './HiPage.css'
 import { useNavigate } from 'react-router-dom'
-import gsap from 'gsap'
-import SplitText from 'gsap/src/SplitText'
-import { ScrollTrigger } from 'gsap/all'
 
 function HiPage() {
   const navigate = useNavigate()
 
-  useLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger)
-    const text1Split = new SplitText('#text1', { type: 'chars, word' })
-    const text2Split = new SplitText('#text2', { type: 'chars, word' })
-    const descriptionSplit = new SplitText('#description1', {
-      type: 'chars, words',
-    })
-    const aboutSplit = new SplitText('#about', { type: 'chars, word' })
-    const panelDescription = new SplitText('#panelDescription', {
-      type: 'chars, words',
-    })
-    const endText = new SplitText('#endText', {
-      type: 'chars, words',
-    })
-
-    panelDescription.words.forEach((word, i) => {
-      gsap.fromTo(
-        word,
-        { color: 'rgba(140,94,145,0.2)' },
-        {
-          color: '#8c5e91',
-          scrollTrigger: {
-            trigger: '#panelDescription',
-            start: () => `top+=${i * 5}% 70%`,
-            end: () => `bottom+=${(i + 1) * 10}% 80%`,
-            scrub: true,
-          },
-        },
-      )
-    })
-
-    const ctx = gsap.context(() => {
-      const tlEnd = gsap.timeline({
-        scrollTrigger: {
-          trigger: '#endContainer',
-          start: 'top top',
-          end: 'bottom bottom',
-        },
-      })
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '#hiContainer',
-          start: '-1% top',
-          end: 'bottom bottom',
-        },
-      })
-
-      tl.from(text1Split.chars, {
-        yPercent: 100,
-        opacity: 0,
-        duration: 1.8,
-        ease: 'expo.out',
-        stagger: { amount: 1, from: 'end' },
-      })
-        .from(
-          text2Split.chars,
-          {
-            xPercent: 100,
-            opacity: 0,
-            duration: 1.5,
-            ease: 'power.out',
-            stagger: { amount: 1, from: 'start' },
-          },
-          '-=2',
-        )
-        .from(
-          descriptionSplit.words,
-          {
-            yPercent: 100,
-            opacity: 0,
-            duration: 1.5,
-            ease: 'power1.out',
-            stagger: { amount: 0.8, from: 'edges' },
-          },
-          '-=2',
-        )
-
-      tlEnd
-        .fromTo(
-          endText.chars,
-          {
-            yPercent: -700,
-            color: 'transparent',
-          },
-          {
-            yPercent: 0,
-            color: 'wheat',
-            duration: 2,
-            ease: 'power1.out',
-            yoyo: true,
-            stagger: { amount: 0.8, from: 'start' },
-          },
-        )
-        .from('#emailInput', { opacity: 0 })
-
-      gsap.fromTo(
-        aboutSplit.chars,
-        {
-          opacity: 0,
-          y: 'random(-100,100)',
-          x: 'random(-100,100)',
-          scale: 0.3,
-          ease: 'power1.out',
-        },
-        {
-          y: 0,
-          x: 0,
-          opacity: 1,
-          scale: 1,
-          filter: 'none',
-          stagger: { grid: 'auto', from: 'start', amount: 1.2 },
-        },
-      )
-    })
-
-    return () => ctx.revert()
-  }, [])
   return (
-    <div className="login">
-      <div className="scene" id="hiContainer">
-        <div className="loginMenu layor">
-          <button className="menuBurger"></button>
-          <div className="loginButtons">
-            <button className="button auth" onClick={() => navigate('/login')}>
-              Войти
-            </button>
-            <button
-              className="button reg"
-              onClick={() => navigate('/register')}
-            >
-              Зарегистрироваться
-            </button>
-          </div>
+    <div className="landing">
+      {/* Navbar */}
+      <nav className="navbar">
+        <div className="nav-logo">
+          Car<span>IP</span>
         </div>
-        <div className="contentWrapper layer bg">
-          <p className="text1" id="text">
-            <span id="text1">Добро</span> <span id="text2">пожаловать!</span>
-          </p>
-          <p className="descrition1" id="description1">
-            Это ваш персональный ИИ агент для создания резюме
-          </p>
-        </div>
-      </div>
-      <div className=" mainContainer" id="mainContainer">
-        <div className="mainContainerTexts layer bg">
-          {/* <p id="about">ABOUT</p> */}
-        </div>
-        <div className="mainContainerPanel layer mid">
-          <img src="resume.jpg" className="containerPhoto" alt="resume" />
-          <p className="containerPanelDescription" id="panelDescription">
-            Это — Career Intelligence Platform! Твой персональный карьерный
-            конструктор. Создай идеальное резюме, получи предложения от компаний
-            и узнай, какие навыки прокачать для роста зарплаты. Регистрация
-            займёт минуту — начни выстраивать свою карьеру с умом!
-          </p>
-        </div>
-      </div>
-      <div className="scene" id="endContainer">
-        <p className="endText layer bg" id="endText">
-          Если ты хочешь присоедениться, авторизируйся
-        </p>
-        <div className="buttons">
-          <button className="button auth" onClick={() => navigate('/login')}>
+        <div className="nav-actions">
+          <button className="btn-ghost" onClick={() => navigate('/login')}>
             Войти
           </button>
-          <button className="button reg" onClick={() => navigate('/register')}>
+          <button className="btn-primary" onClick={() => navigate('/register')}>
             Зарегистрироваться
           </button>
         </div>
-        <div className="contact-information">
-          Контактная информация:<br></br>Бажанов Юрий, 2бАСУ1, +79779919703
-          <br></br>Проект кафедры АСУ 09.03.01 <br></br>
-          <a href="https://vk.com/club236966262">
-            https://vk.com/club236966262
+      </nav>
+
+      {/* Hero */}
+      <section className="hero">
+        <div className="hero-glow" aria-hidden="true" />
+        <div className="hero-badge">✦ ИИ-платформа для карьерного роста</div>
+        <h1>
+          Создай резюме с помощью{' '}
+          <span className="highlight">искусственного интеллекта</span>
+        </h1>
+        <p className="hero-subtitle">
+          Платформа, которая анализирует твои навыки, строит карьерный план
+          и показывает путь к нужной должности
+        </p>
+        <button className="hero-cta" onClick={() => navigate('/register')}>
+          Начать бесплатно →
+        </button>
+      </section>
+
+      {/* Features */}
+      <section className="features">
+        <div className="section-label">Возможности</div>
+        <h2 className="section-title">Всё что нужно для карьеры</h2>
+        <div className="features-grid">
+          <div className="feature-card">
+            <div className="feature-icon">🤖</div>
+            <h3>ИИ-анализ навыков</h3>
+            <p>
+              Умный алгоритм оценивает твои компетенции и сравнивает с
+              требованиями рынка
+            </p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">📄</div>
+            <h3>Готовое резюме за 5 минут</h3>
+            <p>
+              Просто ответь на вопросы — ИИ сформирует профессиональное резюме
+              и выгрузит PDF
+            </p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">📈</div>
+            <h3>Карьерный план и зарплатные вилки</h3>
+            <p>
+              Узнай текущую рыночную стоимость и получи конкретный план роста с
+              реальными цифрами
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="how-it-works">
+        <div className="section-label">Как это работает</div>
+        <h2 className="section-title">Три шага до результата</h2>
+        <div className="steps-grid">
+          <div className="step">
+            <div className="step-number">1</div>
+            <div className="step-content">
+              <h3>Зарегистрируйся</h3>
+              <p>Создай аккаунт за минуту — только имя, email и пароль</p>
+            </div>
+          </div>
+          <div className="step">
+            <div className="step-number">2</div>
+            <div className="step-content">
+              <h3>Пообщайся с ИИ</h3>
+              <p>Расскажи о своём опыте, навыках и целях в удобном чате</p>
+            </div>
+          </div>
+          <div className="step">
+            <div className="step-number">3</div>
+            <div className="step-content">
+              <h3>Получи результат</h3>
+              <p>
+                Скачай готовое резюме и получи персональный карьерный анализ
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section className="pricing">
+        <div className="section-label">Тарифы</div>
+        <h2 className="section-title">Выбери свой план</h2>
+        <p className="pricing-subtitle">Начни бесплатно, расти вместе с платформой</p>
+        <div className="pricing-grid">
+          {/* FREE */}
+          <div className="pricing-card">
+            <div className="pricing-name">Бесплатно</div>
+            <div className="pricing-price">
+              <div className="pricing-price-value">0 ₽</div>
+              <div className="pricing-price-period">в месяц</div>
+            </div>
+            <ul className="pricing-features">
+              <li>Базовый анализ резюме</li>
+              <li>1 резюме в месяц</li>
+              <li>PDF выгрузка</li>
+              <li>Карьерный анализ</li>
+            </ul>
+            <button className="pricing-btn" onClick={() => navigate('/register')}>
+              Начать бесплатно
+            </button>
+          </div>
+          {/* PRO */}
+          <div className="pricing-card featured">
+            <div className="pricing-badge">Популярный</div>
+            <div className="pricing-name">Pro</div>
+            <div className="pricing-price">
+              <div className="pricing-price-value">499 ₽</div>
+              <div className="pricing-price-period">в месяц</div>
+            </div>
+            <ul className="pricing-features">
+              <li>Всё из Free</li>
+              <li>Неограниченные резюме</li>
+              <li>Детальные чек-листы навыков</li>
+              <li>Персональный roadmap</li>
+              <li>Рекомендации курсов</li>
+              <li>Приоритетная поддержка</li>
+            </ul>
+            <button className="pricing-btn featured" onClick={() => navigate('/register')}>
+              Попробовать Pro
+            </button>
+          </div>
+          {/* BUSINESS */}
+          <div className="pricing-card">
+            <div className="pricing-name">Business</div>
+            <div className="pricing-price">
+              <div className="pricing-price-value">2 990 ₽</div>
+              <div className="pricing-price-period">от / в месяц</div>
+            </div>
+            <ul className="pricing-features">
+              <li>Всё из Pro</li>
+              <li>До 50 пользователей</li>
+              <li>Для университетов и компаний</li>
+              <li>HR аналитика</li>
+              <li>API доступ</li>
+              <li>Персональный менеджер</li>
+            </ul>
+            <button className="pricing-btn" onClick={() => navigate('/login')}>
+              Связаться с нами
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Partners */}
+      <section className="partners">
+        <div className="section-label">Экосистема</div>
+        <h2 className="section-title">Лучшие образовательные платформы</h2>
+        <p className="partners-subtitle">
+          Платформа рекомендует лучшие курсы от ведущих образовательных
+          платформ для достижения ваших карьерных целей
+        </p>
+        <div className="partners-grid">
+          <div className="partner-badge">Coursera</div>
+          <div className="partner-badge">Stepik</div>
+          <div className="partner-badge">Яндекс Практикум</div>
+          <div className="partner-badge">Skillbox</div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="cta-section">
+        <h2>Готов выстроить карьеру с умом?</h2>
+        <p>Присоединяйся и начни бесплатно прямо сейчас</p>
+        <div className="cta-buttons">
+          <button
+            className="btn-cta-primary"
+            onClick={() => navigate('/register')}
+          >
+            Зарегистрироваться
+          </button>
+          <button className="btn-cta-ghost" onClick={() => navigate('/login')}>
+            Уже есть аккаунт
+          </button>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="landing-footer">
+        <div>Бажанов Юрий, 2бАСУ1 · +79779919703</div>
+        <div>Проект кафедры АСУ 09.03.01</div>
+        <div>
+          <a
+            href="https://vk.com/club236966262"
+            target="_blank"
+            rel="noreferrer"
+          >
+            vk.com/club236966262
           </a>
         </div>
-      </div>
+      </footer>
     </div>
   )
 }
