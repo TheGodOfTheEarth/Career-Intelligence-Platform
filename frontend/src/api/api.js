@@ -5,6 +5,32 @@ const API_URL = 'https://career-intelligence-platform-backend-production-040c.up
 // Базовая функция для всех запросов
 // Автоматически добавляет JWT токен к каждому запросу
 // ============================================
+async function refreshAccessToken() {
+   const refreshToken = localStorage.getItem('refreshToken')
+   if (!refreshToken) return false
+
+   try {
+      const response = await fetch(`${API_URL}/api/auth/refresh`, {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({ refreshToken }),
+      })
+
+      if (!response.ok) {
+         localStorage.removeItem('token')
+         localStorage.removeItem('refreshToken')
+         return false
+      }
+
+      const data = await response.json()
+      localStorage.setItem('token', data.accessToken)
+      localStorage.setItem('refreshToken', data.refreshToken)
+      return true
+   } catch {
+      return false
+   }
+}
+
 async function apiRequest(endpoint, options = {}) {
    const token = localStorage.getItem('token')
 
@@ -24,7 +50,22 @@ async function apiRequest(endpoint, options = {}) {
    console.log('Заголовки ответа:', response.headers)
 
    if (response.status === 401) {
+      const refreshed = await refreshAccessToken()
+      if (refreshed) {
+         const newToken = localStorage.getItem('token')
+         const retryResponse = await fetch(`${API_URL}${endpoint}`, {
+            ...options,
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: `Bearer ${newToken}`,
+            },
+         })
+         if (retryResponse.ok) {
+            return retryResponse.json()
+         }
+      }
       localStorage.removeItem('token')
+      localStorage.removeItem('refreshToken')
       const error = new Error('Сессия истекла. Пожалуйста, войдите снова.')
       error.status = 401
       throw error
@@ -45,35 +86,43 @@ async function apiRequest(endpoint, options = {}) {
 // АВТОРИЗАЦИЯ
 // ============================================
 export const auth = {
-   // Регистрация — возвращает токен и данные пользователя
+   // Регистрация — возвращает токены и данные пользователя
    register: async ({ name, email, password }) => {
       const data = await apiRequest('/api/auth/register', {
          method: 'POST',
          body: JSON.stringify({ name, email, password }),
       })
-      // Сохраняем токен в localStorage
-      if (data.token) {
-         localStorage.setItem('token', data.token)
+      if (data.accessToken) {
+         localStorage.setItem('token', data.accessToken)
+      }
+      if (data.refreshToken) {
+         localStorage.setItem('refreshToken', data.refreshToken)
       }
       return data
    },
 
-   // Вход — возвращает токен и данные пользователя
+   // Вход — возвращает токены и данные пользователя
    login: async ({ email, password }) => {
       const data = await apiRequest('/api/auth/login', {
          method: 'POST',
          body: JSON.stringify({ email, password }),
       })
-      // Сохраняем токен в localStorage
-      if (data.token) {
-         localStorage.setItem('token', data.token)
+      if (data.accessToken) {
+         localStorage.setItem('token', data.accessToken)
+      }
+      if (data.refreshToken) {
+         localStorage.setItem('refreshToken', data.refreshToken)
       }
       return data
    },
 
-   // Выход — удаляет токен
-   logout: () => {
+   // Выход — уведомляет бэкенд и удаляет оба токена
+   logout: async () => {
+      try {
+         await apiRequest('/api/auth/logout', { method: 'POST' })
+      } catch {}
       localStorage.removeItem('token')
+      localStorage.removeItem('refreshToken')
    },
 
    // Проверить — залогинен ли пользователь
@@ -125,6 +174,25 @@ export const resume = {
 
    // Данные для генерации PDF
    getPdfData: (id) => apiRequest(`/api/resume/${id}/data-for-pdf`),
+}
+
+// ============================================
+// GITHUB
+// ============================================
+export const github = {
+   analyzeProfile: (username, resumeId) =>
+      apiRequest('/api/github/analyze', {
+         method: 'POST',
+         body: JSON.stringify({ username, resumeId }),
+      }),
+}
+
+// ============================================
+// АНАЛИЗ
+// ============================================
+export const analysis = {
+   getGapReport: (resumeId, refresh = false) =>
+      apiRequest(`/api/resume/${resumeId}/gap-report${refresh ? '?refresh=true' : ''}`),
 }
 
 // Экспортируем API_URL на случай, если понадобится
