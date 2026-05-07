@@ -10,7 +10,7 @@ async function refreshAccessToken() {
    if (!refreshToken) return false
 
    try {
-      const response = await fetch(`${API_URL}/api/v1/auth/refresh`, {
+      const response = await fetch(`${API_URL}/api/auth/refresh`, {
          method: 'POST',
          headers: { 'Content-Type': 'application/json' },
          body: JSON.stringify({ refreshToken }),
@@ -34,6 +34,10 @@ async function refreshAccessToken() {
 async function apiRequest(endpoint, options = {}) {
    const token = localStorage.getItem('token')
 
+   console.log(`=== API ЗАПРОС: ${endpoint} ===`)
+   console.log('Метод:', options.method || 'GET')
+   console.log('Тело запроса:', options.body)
+
    const response = await fetch(`${API_URL}${endpoint}`, {
       headers: {
          'Content-Type': 'application/json',
@@ -41,6 +45,9 @@ async function apiRequest(endpoint, options = {}) {
       },
       ...options,
    })
+
+   console.log('Статус ответа:', response.status)
+   console.log('Заголовки ответа:', response.headers)
 
    if (response.status === 401) {
       const refreshed = await refreshAccessToken()
@@ -65,8 +72,10 @@ async function apiRequest(endpoint, options = {}) {
    }
 
    const data = await response.json()
+   console.log('Данные ответа:', data)
 
    if (!response.ok) {
+      console.error('Ошибка сервера:', data)
       throw new Error(data.error || 'Ошибка сервера')
    }
 
@@ -79,7 +88,7 @@ async function apiRequest(endpoint, options = {}) {
 export const auth = {
    // Регистрация — возвращает токены и данные пользователя
    register: async ({ name, email, password }) => {
-      const data = await apiRequest('/api/v1/auth/register', {
+      const data = await apiRequest('/api/auth/register', {
          method: 'POST',
          body: JSON.stringify({ name, email, password }),
       })
@@ -94,7 +103,7 @@ export const auth = {
 
    // Вход — возвращает токены и данные пользователя
    login: async ({ email, password }) => {
-      const data = await apiRequest('/api/v1/auth/login', {
+      const data = await apiRequest('/api/auth/login', {
          method: 'POST',
          body: JSON.stringify({ email, password }),
       })
@@ -110,7 +119,7 @@ export const auth = {
    // Выход — уведомляет бэкенд и удаляет оба токена
    logout: async () => {
       try {
-         await apiRequest('/api/v1/auth/logout', { method: 'POST' })
+         await apiRequest('/api/auth/logout', { method: 'POST' })
       } catch {}
       localStorage.removeItem('token')
       localStorage.removeItem('refreshToken')
@@ -120,7 +129,7 @@ export const auth = {
    isLoggedIn: () => !!localStorage.getItem('token'),
 
    // Получить данные о себе
-   me: () => apiRequest('/api/v1/auth/me'),
+   me: () => apiRequest('/api/auth/me'),
 }
 
 // ============================================
@@ -128,31 +137,27 @@ export const auth = {
 // ============================================
 export const chat = {
    createSession: (previousSessionId) =>
-      apiRequest('/api/v1/chat/session', {
+      apiRequest('/api/chat/session', {
          method: 'POST',
          body: JSON.stringify({ previousSessionId }),
       }),
 
-   getSessions: async (currentSessionId, page = 1, limit = 20) => {
-      const query = new URLSearchParams()
-      if (currentSessionId) query.set('currentSessionId', currentSessionId)
-      query.set('page', page)
-      query.set('limit', limit)
-      const response = await apiRequest(`/api/v1/chat/sessions?${query.toString()}`)
-      return response
-   },
+   getSessions: (currentSessionId) =>
+      apiRequest(
+         `/api/chat/sessions${currentSessionId ? `?currentSessionId=${currentSessionId}` : ''}`,
+      ),
 
-   getSession: (sessionId) => apiRequest(`/api/v1/chat/session/${sessionId}`),
+   getSession: (sessionId) => apiRequest(`/api/chat/session/${sessionId}`),
 
    sendMessage: (sessionId, content) =>
-      apiRequest(`/api/v1/chat/session/${sessionId}/message`, {
+      apiRequest(`/api/chat/session/${sessionId}/message`, {
          method: 'POST',
          body: JSON.stringify({ content }),
       }),
 
    deleteSession: (sessionId, currentSessionId) =>
       apiRequest(
-         `/api/v1/chat/session/${sessionId}${currentSessionId ? `?currentSessionId=${currentSessionId}` : ''}`,
+         `/api/chat/session/${sessionId}${currentSessionId ? `?currentSessionId=${currentSessionId}` : ''}`,
          { method: 'DELETE' },
       ),
 }
@@ -162,16 +167,13 @@ export const chat = {
 // ============================================
 export const resume = {
    // Все резюме пользователя
-   getAll: async (page = 1, limit = 10) => {
-      const response = await apiRequest(`/api/v1/resume/my?page=${page}&limit=${limit}`)
-      return response
-   },
+   getAll: () => apiRequest('/api/resume/my'),
 
    // Конкретное резюме
-   getById: (id) => apiRequest(`/api/v1/resume/${id}`),
+   getById: (id) => apiRequest(`/api/resume/${id}`),
 
    // Данные для генерации PDF
-   getPdfData: (id) => apiRequest(`/api/v1/resume/${id}/data-for-pdf`),
+   getPdfData: (id) => apiRequest(`/api/resume/${id}/data-for-pdf`),
 }
 
 // ============================================
@@ -179,7 +181,7 @@ export const resume = {
 // ============================================
 export const github = {
    analyzeProfile: (username, resumeId) =>
-      apiRequest('/api/v1/github/analyze', {
+      apiRequest('/api/github/analyze', {
          method: 'POST',
          body: JSON.stringify({ username, resumeId }),
       }),
@@ -190,7 +192,7 @@ export const github = {
 // ============================================
 export const analysis = {
    getGapReport: (resumeId, refresh = false) =>
-      apiRequest(`/api/v1/analysis/${resumeId}/gap-report${refresh ? '?refresh=true' : ''}`),
+      apiRequest(`/api/resume/${resumeId}/gap-report${refresh ? '?refresh=true' : ''}`),
 }
 
 // Экспортируем API_URL на случай, если понадобится
